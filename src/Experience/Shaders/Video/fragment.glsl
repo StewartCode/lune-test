@@ -21,10 +21,10 @@ varying vec2 vUv;
 
 void main()
 {
-    float alpha = (clamp(vUv.x, 0.02, 1.0) - 0.02) * 0.5;
-    float alpha2 = (1.0 - clamp(vUv.x, 0.02, 1.0) - 0.02) * 0.5;
-    float alpha3 = clamp(vUv.y, 0.02, 1.0) - 0.02;
-    float alpha4 = 1.0 - clamp(vUv.y, 0.02, 1.0) - 0.02;
+    float alpha = (clamp(vUv.x, 0.02, 1.0) - 0.02) * 0.999;
+    float alpha2 = (1.0 - clamp(vUv.x, 0.02, 1.0) - 0.02) * 0.999;
+    float alpha3 = (clamp(vUv.y, 0.02, 1.0) - 0.02) * 0.999;
+    float alpha4 = (1.0 - clamp(vUv.y, 0.02, 1.0) - 0.02) * 0.999;
     
     // // result                    //short               //long
     float resultAlpha = min( min(alpha, alpha2), min(alpha3, alpha4));
@@ -40,6 +40,6 @@ void main()
 
     // gl_FragColor=vec4(col, resultAlpha * opacity);
     vec4 t = texture2D(uTexture, vUv);
-    t.a = resultAlpha;
+    t.a = resultAlpha ;
     gl_FragColor = t;
 }
