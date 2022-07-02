@@ -43,6 +43,6 @@ void main()
     float distanceFlipped = 1.0 - distance;
 
     vec4 t = texture2D(uTexture, vUv);
-    t.a = distanceFlipped - 0.5;
+    t.a = distanceFlipped - 0.6;
     gl_FragColor = t;
 }
