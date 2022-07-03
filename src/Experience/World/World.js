@@ -20,7 +20,7 @@ export default class World
             // this.fox = new Fox()
             this.environment = new Environment()
             // this.videoBackground = new Video(false, 10, 10);
-            this.video = new Video(true, 10, 10);
+            this.video = new Video(true);
         })
     }
 

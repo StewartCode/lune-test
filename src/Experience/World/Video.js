@@ -1,65 +1,100 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 import Experience from "../Experience";
-import fragmentShader from '../Shaders/Video/fragment.glsl';
-import vertexShader from '../Shaders/Video/vertex.glsl';
+import fragmentShader from "../Shaders/Video/fragment.glsl";
+import vertexShader from "../Shaders/Video/vertex.glsl";
 
-export default class Video 
-{
-    constructor(playVideo, width, height)
-    {
-        this.width = width;
-        this.height = height;
-        this.playVideo = playVideo;
-        this.experience = new Experience();
-        this.scene = this.experience.scene;
-        this.start();
+export default class Video {
+  constructor(playVideo) {
+    this.playVideo = playVideo;
+    this.experience = new Experience();
+    this.scene = this.experience.scene;
+    this.debug = this.experience.debug;
+
+    this.params = {};
+    this.params.opacityModifier = 0.6;
+    this.params.videoSize = 10;
+    this.params.scale = 1;
+
+    if (this.debug.active) {
+      this.debugFolder = this.debug.ui.addFolder("video");
     }
 
-    start() 
-    {
-        this.video = document.getElementById('video');
+    this.start();
+  }
 
-        console.log(this.video);
+  start() {
+    this.video = document.getElementById("video");
 
-        const texture = new THREE.VideoTexture(this.video);
-        texture.needsUpdate;
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.format = THREE.RGBAFormat;
-        texture.crossOrigin = 'anonymous';
+    const texture = new THREE.VideoTexture(this.video);
+    texture.needsUpdate;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.format = THREE.RGBAFormat;
+    texture.crossOrigin = "anonymous";
 
-        if(this.playVideo)
-        {
-            this.object = new THREE.Mesh(
-                new THREE.PlaneBufferGeometry(this.width, this.height),
-                new THREE.ShaderMaterial({
-                    transparent: true,
-                    uniforms: {
-                        uOpacity: { value: 1.0 },
-                        uColor: { value: new THREE.Vector3(0,1,1)},
-                        uTexture: { value: texture }
-                    },
-                    fragmentShader,
-                    vertexShader,
-                })
-            )
-        }
-        else
-        {
-            this.object = new THREE.Mesh(
-                new THREE.PlaneGeometry(10,10),
-                new THREE.MeshBasicMaterial({
-                    map: texture
-                })
-            )
-        }
+    this.material = new THREE.ShaderMaterial({
+      transparent: true,
+      uniforms: {
+        uOpacity: { value: this.params.opacityModifier },
+        uTexture: { value: texture },
+      },
+      fragmentShader,
+      vertexShader,
+    });
 
-        this.scene.add(this.object);
-        // if(this.playVideo == true)
-        // {
-            setTimeout(() => {
-                this.video.play();
-            }, 2000);
-        // }
+    if (this.playVideo) {
+      this.object = new THREE.Mesh(
+        new THREE.PlaneBufferGeometry(this.params.videoSize, this.params.videoSize),
+        this.material
+      );
     }
+
+    this.scene.add(this.object);
+
+    const button = document.getElementById("button");
+
+    button.addEventListener("click", () => {
+      button.style.display = "none";
+      this.video.play();
+    });
+
+    // Debug
+    if (this.debug.active) {
+      this.debugFolder
+        .add(this.params, "opacityModifier")
+        .name("blend")
+        .min(0)
+        .max(1)
+        .step(0.05)
+        .onChange(() => {
+
+            this.scene.traverse((child) =>
+            {
+                if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
+                {
+                    child.material.uniforms.uOpacity.value = this.params.opacityModifier;
+                    child.material.needsUpdate = true;
+                }
+            })
+        });
+
+        this.debugFolder
+        .add(this.params, "scale")
+        .name("scale")
+        .min(0.1)
+        .max(2)
+        .step(0.05)
+        .onChange(() => {
+
+            this.scene.traverse((child) =>
+            {
+                if(child instanceof THREE.Mesh && child.geometry instanceof THREE.PlaneBufferGeometry)
+                {
+                    child.scale.x = this.params.scale;
+                    child.scale.y = this.params.scale;
+                }
+            })
+        });
+    }
+  }
 }
