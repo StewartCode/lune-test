@@ -15,7 +15,7 @@ export default class World
         this.modelGroup = new THREE.Group();
         this.modelGroup.name = 'modelGroup';
         this.scene.add(this.modelGroup);
-        this.modelGroup.rotation.x = Math.PI * 0.5;
+        this.modelGroup.rotation.x = Math.PI * 0.1;
 
         // Wait for resources
         this.resources.on('ready', () =>
