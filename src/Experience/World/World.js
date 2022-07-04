@@ -1,8 +1,9 @@
-import Experience from '../Experience.js'
-import Environment from './Environment.js'
-import Floor from './Floor.js'
-import Fox from './Fox.js'
-import Video from './Video.js'
+import * as THREE from 'three';
+import Experience from '../Experience.js';
+import Environment from './Environment.js';
+import Floor from './Floor.js';
+import Model from './Model'
+import Video from './Video.js';
 
 export default class World
 {
@@ -11,22 +12,26 @@ export default class World
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
+        this.modelGroup = new THREE.Group();
+        this.modelGroup.name = 'modelGroup';
+        this.scene.add(this.modelGroup);
+        this.modelGroup.rotation.x = Math.PI * 0.5;
 
         // Wait for resources
         this.resources.on('ready', () =>
         {
             // Setup
-            // this.floor = new Floor()
-            // this.fox = new Fox()
-            this.environment = new Environment()
+            // this.floor = new Floor();
+            this.model = new Model(this.modelGroup);
+            this.environment = new Environment();
             // this.videoBackground = new Video(false, 10, 10);
-            this.video = new Video(true);
+            // this.video = new Video(true);
         })
     }
 
     update()
     {
-        if(this.fox)
-            this.fox.update()
+        if(this.model)
+            this.model.update()
     }
 }
