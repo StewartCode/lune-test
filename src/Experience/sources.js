@@ -7,7 +7,7 @@ export default [
     {
         name: 'soma',
         type: 'gltfModel',
-        path: 'models/Soma_Dynamic_Paint.glb'
+        path: 'models/Soma_Dynamic_Paint2.glb'
     },
     {
         name: 'eva',
