@@ -14,7 +14,7 @@ export default class Video {
     this.params.blend = 0.0;
     this.params.videoSize = 10;
     this.params.scale = 1;
-    this.params.addLight = 0.1;
+    this.params.addLight = 0.19;
     this.params.blendStrength = 2.1;
 
     if (this.debug.active) {
@@ -105,7 +105,7 @@ export default class Video {
         .name("addLight")
         .min(0.0)
         .max(1.0)
-        .step(0.05)
+        .step(0.005)
         .onChange(() => {
 
             this.scene.traverse((child) =>
