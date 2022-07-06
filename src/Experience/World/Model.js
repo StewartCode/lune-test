@@ -19,10 +19,10 @@ export default class Model
         }
 
         // Resource
-        this.resource = this.resources.items.soma
+        this.resource = this.resources.items.why
 
         this.setModel()
-        this.setAnimation()
+        // this.setAnimation()
     }
 
     setModel()
@@ -36,6 +36,13 @@ export default class Model
             if(child instanceof THREE.Mesh)
             {
                 child.castShadow = true
+                child.material = new THREE.MeshPhongMaterial({
+                    color: new THREE.Color('#EDEDED'),
+                    shininess: 350,
+                    specular: new THREE.Color('#EDEDED'),
+                    emissive: new THREE.Color('black')
+                });
+                child.material.side = THREE.DoubleSide;
             }
         })
     }
@@ -92,6 +99,6 @@ export default class Model
 
     update()
     {
-        this.animation.mixer.update(this.time.delta * 0.001)
+        // this.animation.mixer.update(this.time.delta * 0.001)
     }
 }

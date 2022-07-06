@@ -22,10 +22,10 @@ export default class World
         {
             // Setup
             // this.floor = new Floor();
-            this.model = new Model(this.modelGroup);
+            // this.model = new Model(this.modelGroup);
             this.environment = new Environment();
             // this.videoBackground = new Video(false, 10, 10);
-            // this.video = new Video(true);
+            this.video = new Video(true);
         })
     }
 

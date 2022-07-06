@@ -1,5 +1,7 @@
 uniform float uOpacity;
 uniform sampler2D uTexture;
+uniform float uAddLight;
+uniform float UBlendStrength;
 varying vec2 vUv;
 
 // uniform vec3 uColorStart;
@@ -39,9 +41,15 @@ void main()
 
     float distance = distance(vec2(0.5, 0.5) ,vUv);
 
+    distance *= UBlendStrength;
+
     float distanceFlipped = 1.0 - distance;
 
     vec4 t = texture2D(uTexture, vUv);
     t.a = distanceFlipped - uOpacity;
+    t.x += uAddLight;
+    t.y += uAddLight;
+    t.z += uAddLight;
+
     gl_FragColor = t;
 }

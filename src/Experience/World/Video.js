@@ -11,9 +11,11 @@ export default class Video {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.opacityModifier = 0.6;
+    this.params.blend = 0.0;
     this.params.videoSize = 10;
     this.params.scale = 1;
+    this.params.addLight = 0.1;
+    this.params.blendStrength = 2.1;
 
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder("video");
@@ -35,8 +37,10 @@ export default class Video {
     this.material = new THREE.ShaderMaterial({
       transparent: true,
       uniforms: {
-        uOpacity: { value: this.params.opacityModifier },
+        uOpacity: { value: this.params.blend },
         uTexture: { value: texture },
+        uAddLight: { value: this.params.addLight },
+        UBlendStrength: { value: this.params.blendStrength }
       },
       fragmentShader,
       vertexShader,
@@ -61,7 +65,7 @@ export default class Video {
     // Debug
     if (this.debug.active) {
       this.debugFolder
-        .add(this.params, "opacityModifier")
+        .add(this.params, "blend")
         .name("blend")
         .min(0)
         .max(1)
@@ -72,7 +76,7 @@ export default class Video {
             {
                 if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
                 {
-                    child.material.uniforms.uOpacity.value = this.params.opacityModifier;
+                    child.material.uniforms.uOpacity.value = this.params.blend;
                     child.material.needsUpdate = true;
                 }
             })
@@ -92,6 +96,42 @@ export default class Video {
                 {
                     child.scale.x = this.params.scale;
                     child.scale.y = this.params.scale;
+                }
+            })
+        });
+
+        this.debugFolder
+        .add(this.params, "addLight")
+        .name("addLight")
+        .min(0.0)
+        .max(1.0)
+        .step(0.05)
+        .onChange(() => {
+
+            this.scene.traverse((child) =>
+            {
+                if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
+                {
+                    child.material.uniforms.uAddLight.value = this.params.addLight;
+                    child.material.needsUpdate = true;
+                }
+            })
+        });
+
+        this.debugFolder
+        .add(this.params, "blendStrength")
+        .name("blendStrength")
+        .min(0.1)
+        .max(3)
+        .step(0.1)
+        .onChange(() => {
+
+            this.scene.traverse((child) =>
+            {
+                if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
+                {
+                    child.material.uniforms.UBlendStrength.value = this.params.blendStrength;
+                    child.material.needsUpdate = true;
                 }
             })
         });
