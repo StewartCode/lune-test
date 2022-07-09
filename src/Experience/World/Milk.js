@@ -15,7 +15,7 @@ export default class Milk
 
         this.params = {};
         this.params.blend = 0.85;
-        this.params.waveHeight = 1.25;
+        this.params.waveHeight = 0.25;
         this.params.blendStrength = 5.0;
         this.params.speed = 0.01;
         this.params.endRipple = 1.0;
