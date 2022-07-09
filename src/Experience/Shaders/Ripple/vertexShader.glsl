@@ -25,7 +25,7 @@ void main()
 
     distance *= UBlendStrength;
 
-    float elevation = (sin(angle) * uWaveHeight) * distance;
+    float elevation = (sin(angle) * uWaveHeight);
 
     modelPosition.z += elevation;
     vec4 viewPosition = viewMatrix * modelPosition;
@@ -34,6 +34,17 @@ void main()
     gl_Position = projectedPosition;
 
     vUv = uv;
-    vElevation = elevation;
+    vElevation = -elevation;
 
 }
+
+// simple vertex shader
+
+// void main()
+// {
+// 	gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex;
+// 	gl_FrontColor  = gl_Color;
+// 	gl_TexCoord[0] = gl_MultiTexCoord0;
+
+//     vUv = uv;
+// }

@@ -1,6 +1,9 @@
 uniform vec3 uColor;
 uniform sampler2D uTexture;
 uniform float UBlendStrength;
+uniform float UBlend;
+uniform float uTime;
+uniform float uEndRipple;
 
 varying vec2 vUv;
 varying float vElevation;
@@ -27,9 +30,17 @@ void main()
 
     float distance = distance(vec2(0.5, 0.5) ,vUv);
 
+
     distance *= UBlendStrength;
 
     float distanceFlipped = 1.0 - distance;
+
+    float muliplier = 1.0;
+
+    if (distanceFlipped > uEndRipple)
+    {
+        muliplier = 0.0;
+    }
 
     // vec4 t = texture2D(uTexture, vUv);
     // t.a = distanceFlipped - uOpacity;
@@ -41,7 +52,32 @@ void main()
 
     textureColor.rgb *= vElevation * 2.0 + 0.65;
 
-    textureColor.a = distanceFlipped - 0.75;
+    textureColor.a = (distanceFlipped - UBlend) * muliplier;
 
     gl_FragColor = textureColor;
 }
+
+
+
+
+
+
+// float radius = .5;
+
+// void main()
+// {
+// 	float t = clamp(uTime / 6., 0., 1.);
+
+// 	vec2 coords = vUv.st;
+// 	vec2 dir = coords - vec2(.5);
+	
+// 	float dist = distance(coords, vec2(.5));
+// 	vec2 offset = dir * (sin(dist * 80. - uTime*15.) + .5) / 30.;
+
+// 	vec2 texCoord = coords + (offset * 0.1);
+// 	vec4 diffuse = texture2D(uTexture, texCoord);
+
+// 	vec4 mixin = texture2D(uTexture, texCoord);
+
+//  	gl_FragColor = mixin * t + diffuse * (1. - t);
+// }
