@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import Experience from '../Experience';
 import fragmentShader from '../../Experience/Shaders/Ripple/fragmentShader.glsl';
 import vertexShader from '../../Experience/Shaders/Ripple/vertexShader.glsl';
+import { gsap } from 'gsap';
 
 export default class Milk 
 {
@@ -14,22 +15,25 @@ export default class Milk
 
         this.params = {};
         this.params.blend = 0.85;
-        this.params.waveHeight = 0.25;
+        this.params.waveHeight = 1.25;
         this.params.blendStrength = 5.0;
         this.params.speed = 0.01;
         this.params.endRipple = 1.0;
 
-        if (this.debug.active) {
-            this.debugFolder = this.debug.ui.addFolder("milk");
-          }
+
+        //cache
+        this.objectOfTweens;
+
+
 
         this.start();
-        this.debugStuff();
+        // this.debugStuff();
+        this.animationSetup();
+        this.destroy();
     }
-
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(15,15, 128, 128);
+        this.geometry = new THREE.PlaneBufferGeometry(10, 10, 128, 128);
 
         const customVertexShader = document.getElementById('customVertexShader').textContent;
         const customFragmentShader = document.getElementById('customFragmentShader').textContent;
@@ -75,8 +79,20 @@ export default class Milk
         this.scene.add(this.instance);
     }
 
+    setPosition(vector3)
+    {
+        this.instance.position.x = vector3.x;
+        this.instance.position.y = vector3.y;
+        this.instance.position.z = vector3.z;
+    }
+
     debugStuff()
     {
+
+        if (this.debug.active) {
+            this.debugFolder = this.debug.ui.addFolder("milk");
+          }
+
             if (this.debug.active) {
                 this.debugFolder
                     .add(this.params, "blend")
@@ -172,18 +188,30 @@ export default class Milk
                 }
     }
 
+    animationSetup()
+    {
+        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 0.4, duration: 1.0, paused: true});
+        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.85, duration: 3.0, delay: 0.1, paused: true});
+    }
+
+
     update()
     {
         this.t = this.experience.time.elapsed;
         this.material.uniforms.uTime.value = this.t;
 
-        if(this.material.uniforms.UBlendStrength.value > 0.1)
-        {
-            this.material.uniforms.UBlendStrength.value -= (this.t * 0.0001);
-        }
-        if(this.material.uniforms.uEndRipple.value > 0.85)
-        {
-            this.material.uniforms.uEndRipple.value -= (this.t * 0.000001);
-        }
+        // if(this.material.uniforms.UBlendStrength.value > 0.1)
+        // {
+        //     this.material.uniforms.UBlendStrength.value -= (this.t * 0.0001);
+        // }
+        // if(this.material.uniforms.uEndRipple.value > 0.85)
+        // {
+        //     this.material.uniforms.uEndRipple.value -= (this.t * 0.000001);
+        // }
+    }
+
+    destroy()
+    {
+
     }
 }

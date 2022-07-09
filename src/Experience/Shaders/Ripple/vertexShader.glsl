@@ -13,8 +13,8 @@ void main()
 
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-    float dx = modelPosition.x;
-    float dy = modelPosition.y;
+    float dx = position.x;
+    float dy = position.y;
 
     float freq = sqrt(dx*dx + dy*dy) * 5.0;
 
