@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import Experience from '../Experience.js';
 import Environment from './Environment.js';
 import Floor from './Floor.js';
+import Milk from './Milk.js';
 import Model from './Model'
 import Video from './Video.js';
 
@@ -23,15 +24,22 @@ export default class World
             // Setup
             // this.floor = new Floor();
             // this.model = new Model(this.modelGroup);
+            this.milk = new Milk();
             this.environment = new Environment();
             // this.videoBackground = new Video(false, 10, 10);
-            this.video = new Video(true);
+            // this.video = new Video(true);
         })
     }
 
     update()
     {
         if(this.model)
+        {
             this.model.update()
+        }
+        if(this.milk)
+        {
+            this.milk.update()
+        }   
     }
 }
