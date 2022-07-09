@@ -50,8 +50,6 @@ export default class Model
     setAnimation()
     {
         this.animation = {}
-
-        console.log(this.model);
         
         // Mixer
         this.animation.mixer = new THREE.AnimationMixer(this.model)

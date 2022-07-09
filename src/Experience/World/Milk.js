@@ -14,19 +14,38 @@ export default class Milk
 
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(10,10, 64, 64);
+        this.geometry = new THREE.PlaneBufferGeometry(10,10, 128, 128);
+
+        const customVertexShader = document.getElementById('customVertexShader').textContent;
+        const customFragmentShader = document.getElementById('customFragmentShader').textContent;
+
+
+        const customUniform = new THREE.UniformsUtils.merge([
+            THREE.ShaderLib.phong.uniforms,
+            {
+                uColor: { value: new THREE.Color('#EDEDED')},
+                uTime: { value: this.time },
+                uSpeed: { value: 0.0075 },
+                uWaveHeight: { value: 2.1 },
+                UBlendStrength: { value: 0.5 },
+                shininess: { value: 150.0 }
+            }
+        ])
+
         this.material = new THREE.ShaderMaterial({
             transparent: true,
             fragmentShader,
             vertexShader,
-            uniforms: {
-                uColor: { value: new THREE.Color('#EDEDED')},
-                uTime: { value: this.time },
-                uSpeed: { value: 0.0075 },
-                uWaveHeight: { value: 0.2 },
-                UBlendStrength: { value: 0.5 }
-            }
+            uniforms: customUniform,
+            lights: true,
+            side: THREE.DoubleSide,
         });
+
+        this.material2 = new THREE.MeshPhongMaterial({
+            transparent: true
+        })
+
+        console.log(this.material);
 
         this.instance = new THREE.Mesh(this.geometry, this.material);
 
