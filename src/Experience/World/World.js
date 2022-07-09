@@ -16,8 +16,6 @@ export default class World
         this.resources = this.experience.resources;
         this.mouse = this.experience.mouse;
 
-        console.log(this.mouse);
-
 
 
         this.modelGroup = new THREE.Group();
@@ -28,8 +26,6 @@ export default class World
         this.count = 5;
 
         this.runMouseDetect();
-
-        this.follow = true;
 
 
         // Wait for resources
@@ -50,7 +46,6 @@ export default class World
                 this.milk.setPosition(this.targetPositionVector3);
                 this.milk.tween1.restart();
                 this.milk.tween2.restart();
-                this.follow = false;
             })
         })
     }
@@ -60,10 +55,6 @@ export default class World
         this.mouse.on('mouse-move', () => 
             {
                 this.targetPositionVector3 = new THREE.Vector3(this.mouse.positionInThreeSpace.x, this.mouse.positionInThreeSpace.y, this.mouse.positionInThreeSpace.z);
-                if(this.follow)
-                {
-                    this.milk.setPosition(this.targetPositionVector3);
-                }
             }
         )
     }

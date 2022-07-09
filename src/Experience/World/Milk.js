@@ -72,9 +72,9 @@ export default class Milk
             transparent: true
         })
 
-        console.log(this.material);
-
         this.instance = new THREE.Mesh(this.geometry, this.material);
+
+        this.instance.position.x = -100;
 
         this.scene.add(this.instance);
     }
