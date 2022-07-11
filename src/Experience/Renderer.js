@@ -11,7 +11,7 @@ export default class Renderer {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.color = "#EDEDED";
+    this.params.color = "#000000";
 
     this.setInstance();
 

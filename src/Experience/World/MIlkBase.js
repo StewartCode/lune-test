@@ -1,10 +1,8 @@
 import * as THREE from 'three';
 import Experience from '../Experience';
-import fragmentShader from '../../Experience/Shaders/Ripple/fragmentShader.glsl';
-import vertexShader from '../../Experience/Shaders/Ripple/vertexShader.glsl';
 import { gsap } from 'gsap';
 
-export default class Milk 
+export default class MilkBase 
 {
     constructor()
     {
@@ -14,11 +12,6 @@ export default class Milk
 
 
         this.params = {};
-        this.params.blend = 0.85;
-        this.params.waveHeight = 0.25;
-        this.params.blendStrength = 5.0;
-        this.params.speed = 0.0214;
-        this.params.endRipple = 1.0;
 
 
         //cache
@@ -27,54 +20,55 @@ export default class Milk
 
 
         this.start();
-        this.debugStuff();
+        // this.debugStuff();
 
         //paused
-        this.animationSetup(false);
+        // this.animationSetup(false);
         this.destroy();
     }
     start()
     {
         this.geometry = new THREE.PlaneBufferGeometry(10, 10, 128, 128);
 
-        const customVertexShader = document.getElementById('customVertexShader').textContent;
-        const customFragmentShader = document.getElementById('customFragmentShader').textContent;
+        // const customVertexShader = document.getElementById('customVertexShader').textContent;
+        // const customFragmentShader = document.getElementById('customFragmentShader').textContent;
 
-        this.texture = document.getElementById("texture1");
-
-
-        const texture = new THREE.Texture(this.texture);
+        // this.texture = document.getElementById("texture1");
 
 
-        const customUniform = new THREE.UniformsUtils.merge([
-            THREE.ShaderLib.phong.uniforms,
-            {
-                uColor: { value: new THREE.Color('#EDEDED')},
-                uTime: { value: this.time },
-                uSpeed: { value: this.params.speed },
-                uWaveHeight: { value: this.params.waveHeight },
-                UBlendStrength: { value: this.params.blendStrength },
-                UBlend: { value: this.params.blend },
-                shininess: { value: 150.0 },
-                uTexture: { value:  texture},
-                uEndRipple: { value: this.params.endRipple }
-            }
-        ])
+        // const texture = new THREE.Texture(this.texture);
 
-        this.material = new THREE.ShaderMaterial({
-            transparent: true,
-            fragmentShader,
-            vertexShader,
-            uniforms: customUniform,
-            lights: true,
-            side: THREE.FrontSide,
-        });
 
-        this.material2 = new THREE.MeshPhongMaterial({
-            transparent: true
+        // const customUniform = new THREE.UniformsUtils.merge([
+        //     THREE.ShaderLib.phong.uniforms,
+        //     {
+        //         uColor: { value: new THREE.Color('#EDEDED')},
+        //         uTime: { value: this.time },
+        //         uSpeed: { value: this.params.speed },
+        //         uWaveHeight: { value: this.params.waveHeight },
+        //         UBlendStrength: { value: this.params.blendStrength },
+        //         UBlend: { value: this.params.blend },
+        //         shininess: { value: 150.0 },
+        //         uTexture: { value:  texture},
+        //         uEndRipple: { value: this.params.endRipple }
+        //     }
+        // ])
+
+        // this.material = new THREE.ShaderMaterial({
+        //     transparent: true,
+        //     fragmentShader,
+        //     vertexShader,
+        //     uniforms: customUniform,
+        //     lights: true,
+        //     side: THREE.FrontSide,
+        // });
+
+        this.material2 = new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color('#EDEDEDD'),
+            // transparent: true
         })
 
-        this.instance = new THREE.Mesh(this.geometry, this.material);
+        this.instance = new THREE.Mesh(this.geometry, this.material2);
 
         // this.instance.position.x = -100;
 

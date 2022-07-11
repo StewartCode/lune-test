@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
+import { gsap } from 'gsap';
 
 export default class Model
 {
@@ -12,26 +13,35 @@ export default class Model
         this.time = this.experience.time
         this.debug = this.experience.debug
 
-        // Debug
-        if(this.debug.active)
-        {
-            this.debugFolder = this.debug.ui.addFolder('model')
-        }
+        this.axisHelper = new THREE.AxesHelper();
+        this.scene.add(this.axisHelper);
+
+        this.params = {};
+        this.params.rotateX = 0.26;
+        this.params.rotateY = 0.104;
+        this.params.rotateZ = 1.6;
+        this.params.scale = 0.7;
+        this.params.height = -1;
+
+        this.debugStuff();
 
         // Resource
         this.resource = this.resources.items.why
 
-        this.setModel()
-        // this.setAnimation()
+        this.setModel();
+        this.animationSetup(false);
     }
 
     setModel()
     {
-        this.model = this.resource.scene
-        this.model.scale.set(1, 1, 1)
-        this.group.add(this.model);
+        this.instance = this.resource.scene;
+        this.instance.scale.set(this.params.scale, this.params.scale, this.params.scale);
+        this.instance.rotation.set(this.params.rotateX, this.params.rotateY, this.params.rotateZ);
+        this.instance.position.z = this.params.height;
 
-        this.model.traverse((child) =>
+        this.group.add(this.instance);
+
+        this.instance.traverse((child) =>
         {
             if(child instanceof THREE.Mesh)
             {
@@ -93,6 +103,83 @@ export default class Model
         //     this.debugFolder.add(debugObject, 'playWalking')
         //     this.debugFolder.add(debugObject, 'playRunning')
         // }
+    }
+
+    animationSetup(bool)
+    {
+        this.tween1 = gsap.to(this.instance.position, {z: 1, duration: 8.0, paused: bool, delay: 1.5});
+    }
+
+    debugStuff()
+    {
+        // Debug
+        if(this.debug.active)
+        {
+            this.debugFolder = this.debug.ui.addFolder('model')
+        }
+
+        if (this.debug.active) {
+            this.debugFolder
+                .add(this.params, "rotateX")
+                .name("rotateX")
+                .min(-Math.PI *2)
+                .max(Math.PI *2)
+                .step(0.01)
+                .onChange(() => {
+                        this.instance.rotation.x = this.params.rotateX;
+                });
+            }
+
+        if (this.debug.active) {
+            this.debugFolder
+                .add(this.params, "rotateY")
+                .name("rotateY")
+                .min(-Math.PI *2)
+                .max(Math.PI *2)
+                .step(0.001)
+                .onChange(() => {
+                        this.instance.rotation.y = this.params.rotateY;
+                });
+            }
+
+        if (this.debug.active) {
+            this.debugFolder
+                .add(this.params, "rotateZ")
+                .name("rotateZ")
+                .min(-Math.PI *2)
+                .max(Math.PI *2)
+                .step(0.1)
+                .onChange(() => {
+                        this.instance.rotation.z = this.params.rotateZ;
+                });
+            }
+
+
+            if (this.debug.active) {
+                this.debugFolder
+                    .add(this.params, "scale")
+                    .name("scale")
+                    .min(0.1)
+                    .max(4)
+                    .step(0.1)
+                    .onChange(() => {
+                            this.instance.scale.x = this.params.scale;
+                            this.instance.scale.y = this.params.scale;
+                            this.instance.scale.z = this.params.scale;
+                    });
+                }
+
+            if (this.debug.active) {
+                this.debugFolder
+                    .add(this.params, "height")
+                    .name("height")
+                    .min(-1)
+                    .max(1)
+                    .step(0.1)
+                    .onChange(() => {
+                            this.instance.position.z = this.params.height;
+                    });
+                }
     }
 
     update()
