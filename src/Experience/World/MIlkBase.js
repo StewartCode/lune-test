@@ -28,7 +28,8 @@ export default class MilkBase
     }
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(10, 10, 128, 128);
+        this.geometry = new THREE.PlaneBufferGeometry(10, 10, 64, 64);
+        this.normal = this.experience.resources.items.normal;
 
         // const customVertexShader = document.getElementById('customVertexShader').textContent;
         // const customFragmentShader = document.getElementById('customFragmentShader').textContent;
@@ -64,11 +65,17 @@ export default class MilkBase
         // });
 
         this.material2 = new THREE.MeshPhysicalMaterial({
-            color: new THREE.Color('#EDEDEDD'),
-            // transparent: true
+            color: new THREE.Color('#EDEDED'),
+            // normalMap: this.normal,
+            transparent: true,
+            metalness: 0.5,
+            roughness: 0,
+            clearcoat: 1,
+            clearcoatRoughness: 0.4
         })
 
         this.instance = new THREE.Mesh(this.geometry, this.material2);
+        this.instance.receiveShadow = true;
 
         // this.instance.position.x = -100;
 

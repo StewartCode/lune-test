@@ -44,11 +44,11 @@ export default class World
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 
-            document.addEventListener('click', () => {
-                this.milk.setPosition(this.targetPositionVector3);
-                this.milk.tween1.restart();
-                this.milk.tween2.restart();
-            })
+            // document.addEventListener('click', () => {
+            //     this.milk.setPosition(this.targetPositionVector3);
+            //     this.milk.tween1.restart();
+            //     this.milk.tween2.restart();
+            // })
         })
     }
 

@@ -34,10 +34,14 @@ export default class Model
 
     setModel()
     {
+        this.normal = this.experience.resources.items.standardNormal;
+
         this.instance = this.resource.scene;
+        this.instance.castShadow = true;
         this.instance.scale.set(this.params.scale, this.params.scale, this.params.scale);
         this.instance.rotation.set(this.params.rotateX, this.params.rotateY, this.params.rotateZ);
         this.instance.position.z = this.params.height;
+        this.instance.position.x = 0.2;
 
         this.group.add(this.instance);
 
@@ -46,11 +50,17 @@ export default class Model
             if(child instanceof THREE.Mesh)
             {
                 child.castShadow = true
-                child.material = new THREE.MeshPhongMaterial({
+                child.material = new THREE.MeshPhysicalMaterial({
                     color: new THREE.Color('#EDEDED'),
-                    shininess: 350,
-                    specular: new THREE.Color('#EDEDED'),
-                    emissive: new THREE.Color('black')
+                    metalness: 0.0,
+                    roughness: 0,
+                    clearcoat: 1,
+                    clearcoatRoughness: 0.4,
+
+                    // shininess: 350,
+                    // specular: new THREE.Color('#EDEDED'),
+                    emissive: new THREE.Color('black'),
+                    normalMap: this.normal
                 });
                 child.material.side = THREE.DoubleSide;
             }
@@ -107,7 +117,7 @@ export default class Model
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.instance.position, {z: 1, duration: 8.0, paused: bool, delay: 1.5});
+        this.tween1 = gsap.to(this.instance.position, {z: -0.15, duration: 8.0, paused: bool, delay: 0.5});
     }
 
     debugStuff()
