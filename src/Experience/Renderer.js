@@ -20,7 +20,7 @@ export default class Renderer {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.color = "#000000";
+    this.params.color = "#EDEDED";
 
     this.setInstance();
 
@@ -32,8 +32,8 @@ export default class Renderer {
         aperture: 0.22,
         maxblur: 0.01,
         // maxblur: 0
-        bloom: 0.14,
-        film: 0.24,
+        bloom: 0.27,
+        film: 0.14,
         scanlines: 1024,
         scanlinesIntensity: 0.0
     }
@@ -183,7 +183,6 @@ export default class Renderer {
       // console.log(this.postProcessing);
       if(this.postProcessing.boken.uniforms['focus'].value)
       {
-        console.log('hit1');
 
           return () => {
               // this.postProcessing.boken.uniforms['focus'].value = this.effectController.focus;
@@ -201,9 +200,9 @@ export default class Renderer {
 
 
   update() {
-    this.instance.render(this.scene, this.camera.instance);
+    // this.instance.render(this.scene, this.camera.instance);
 
-    // this.effectComposer.render();
+    this.effectComposer.render();
 
   }
 }

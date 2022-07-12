@@ -33,7 +33,7 @@ export default class Environment
 
     setSunLight()
     {
-        this.sunLight = new THREE.DirectionalLight('#ffffff', 0.658)
+        this.sunLight = new THREE.DirectionalLight('#ffffff', 1.6)
         // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4)
         this.sunLight.castShadow = true
         this.sunLight.shadow.camera.far = 15
@@ -117,7 +117,7 @@ export default class Environment
 
     animationSetup(bool)
     {
-        // this.tween1 = gsap.to(this.sunLight.position, {y: 0.452, duration: 4.0, paused: bool, delay: 4.0});
-        // this.tween1 = gsap.to(this.sunLight.position, {x: 0.5, duration: 4.0, paused: bool, delay: 4.0});
+        this.tween1 = gsap.to(this.sunLight.position, {y: 0.452, duration: 4.0, paused: bool, delay: 4.0});
+        this.tween1 = gsap.to(this.sunLight.position, {x: 0.5, duration: 4.0, paused: bool, delay: 4.0});
     }
 }

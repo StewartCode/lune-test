@@ -28,7 +28,7 @@ export default class MilkBase
     }
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(10, 10, 64, 64);
+        this.geometry = new THREE.PlaneBufferGeometry(15, 15, 64, 64);
         this.normal = this.experience.resources.items.normal;
 
         // const customVertexShader = document.getElementById('customVertexShader').textContent;
@@ -75,9 +75,9 @@ export default class MilkBase
         })
 
         this.instance = new THREE.Mesh(this.geometry, this.material2);
-        this.instance.receiveShadow = true;
+        this.instance.receiveShadow = false;
 
-        // this.instance.position.x = -100;
+        this.instance.position.z = -0.001;
 
         this.scene.add(this.instance);
     }

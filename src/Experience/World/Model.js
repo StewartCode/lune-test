@@ -13,8 +13,8 @@ export default class Model
         this.time = this.experience.time
         this.debug = this.experience.debug
 
-        this.axisHelper = new THREE.AxesHelper();
-        this.scene.add(this.axisHelper);
+        // this.axisHelper = new THREE.AxesHelper();
+        // this.scene.add(this.axisHelper);
 
         this.params = {};
         this.params.rotateX = 0.26;
@@ -43,7 +43,9 @@ export default class Model
         this.instance.position.z = this.params.height;
         this.instance.position.x = 0.2;
 
-        this.group.add(this.instance);
+        setTimeout(() => {
+            this.group.add(this.instance);
+        }, 2200);
 
         this.instance.traverse((child) =>
         {
@@ -52,7 +54,7 @@ export default class Model
                 child.castShadow = true
                 child.material = new THREE.MeshPhysicalMaterial({
                     color: new THREE.Color('#EDEDED'),
-                    metalness: 0.0,
+                    metalness: 0.75,
                     roughness: 0,
                     clearcoat: 1,
                     clearcoatRoughness: 0.4,
@@ -67,57 +69,9 @@ export default class Model
         })
     }
 
-    setAnimation()
-    {
-        this.animation = {}
-        
-        // Mixer
-        this.animation.mixer = new THREE.AnimationMixer(this.model)
-        
-        // Actions
-        this.animation.actions = {}
-
-        console.log(this.animation);
-
-        console.log(this.resource);
-        
-        this.animation.actions.idle = this.animation.mixer.clipAction(this.resource.animations[0])
-        // this.animation.actions.walking = this.animation.mixer.clipAction(this.resource.animations[1])
-        // this.animation.actions.running = this.animation.mixer.clipAction(this.resource.animations[2])
-        
-        this.animation.actions.current = this.animation.actions.idle
-        this.animation.actions.current.play()
-
-        // Play the action
-        this.animation.play = (name) =>
-        {
-            const newAction = this.animation.actions[name]
-            const oldAction = this.animation.actions.current
-
-            newAction.reset()
-            newAction.play()
-            newAction.crossFadeFrom(oldAction, 1)
-
-            this.animation.actions.current = newAction
-        }
-
-        // // Debug
-        // if(this.debug.active)
-        // {
-        //     const debugObject = {
-        //         playIdle: () => { this.animation.play('idle') },
-        //         playWalking: () => { this.animation.play('walking') },
-        //         playRunning: () => { this.animation.play('running') }
-        //     }
-        //     this.debugFolder.add(debugObject, 'playIdle')
-        //     this.debugFolder.add(debugObject, 'playWalking')
-        //     this.debugFolder.add(debugObject, 'playRunning')
-        // }
-    }
-
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.instance.position, {z: -0.15, duration: 8.0, paused: bool, delay: 0.5});
+        this.tween1 = gsap.to(this.instance.position, {z: -0.15, duration: 8.0, paused: bool, delay: 0.25});
     }
 
     debugStuff()

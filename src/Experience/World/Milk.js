@@ -15,10 +15,10 @@ export default class Milk
 
         this.params = {};
         this.params.blend = 0.85;
-        this.params.waveHeight = 0.02;
+        this.params.waveHeight = 0.225;
         // this.params.blendStrength = 5.0;
-        this.params.blendStrength = 0.1;
-        this.params.speed = 0.0214;
+        this.params.blendStrength = 10.0;
+        this.params.speed = 0.0114;
         this.params.endRipple = 1.0;
 
 
@@ -31,14 +31,14 @@ export default class Milk
         this.debugStuff();
 
         //paused
-        // this.animationSetup(false);
+        this.animationSetup(false);
         this.destroy();
 
         console.log(this.instance);
     }
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(10, 10, 128, 128);
+        this.geometry = new THREE.PlaneBufferGeometry(20, 20, 128, 128);
 
         const customVertexShader = document.getElementById('customVertexShader').textContent;
         const customFragmentShader = document.getElementById('customFragmentShader').textContent;
@@ -73,9 +73,9 @@ export default class Milk
             side: THREE.FrontSide,
         });
 
-        this.material2 = new THREE.MeshPhongMaterial({
-            transparent: true
-        })
+        // this.material2 = new THREE.MeshPhongMaterial({
+        //     transparent: true
+        // })
 
         this.instance = new THREE.Mesh(this.geometry, this.material);
 
@@ -120,8 +120,8 @@ export default class Milk
                     this.debugFolder
                     .add(this.params, "blendStrength")
                     .name("blendStrength")
-                    .min(0.1)
-                    .max(5.0)
+                    .min(0.0)
+                    .max(10.0)
                     .step(0.1)
                     .onChange(() => {
 
@@ -195,8 +195,8 @@ export default class Milk
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 0.4, duration: 1.0, paused: bool});
-        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.0, duration: 3.0, delay: 0.1, paused: bool});
+        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 4.0, duration: 6.0, paused: bool});
+        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.0, duration: 6.0, delay: 0.5, paused: bool});
     }
 
 
