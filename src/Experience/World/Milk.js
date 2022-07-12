@@ -14,12 +14,12 @@ export default class Milk
 
 
         this.params = {};
-        this.params.blend = 0.85;
+        this.params.blend = 0.0;
         this.params.waveHeight = 0.225;
-        // this.params.blendStrength = 5.0;
+        this.params.frequency = 1.0;
         this.params.blendStrength = 10.0;
         this.params.speed = 0.0114;
-        this.params.endRipple = 1.0;
+        this.params.endRipple = 0.915;
 
 
         //cache
@@ -33,12 +33,10 @@ export default class Milk
         //paused
         this.animationSetup(false);
         this.destroy();
-
-        console.log(this.instance);
     }
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(20, 20, 128, 128);
+        this.geometry = new THREE.PlaneBufferGeometry(25, 25, 128, 128);
 
         const customVertexShader = document.getElementById('customVertexShader').textContent;
         const customFragmentShader = document.getElementById('customFragmentShader').textContent;
@@ -111,7 +109,7 @@ export default class Milk
                         {
                             if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
                             {
-                                // child.material.uniforms.UBlend.value = this.params.blend;
+                                child.material.uniforms.UBlend.value = this.params.blend;
                                 child.material.needsUpdate = true;
                             }
                         })
@@ -195,8 +193,14 @@ export default class Milk
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 4.0, duration: 8.0, paused: bool, repeat: -1});
-        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.0, duration: 8.0, delay: 0.5, paused: bool, repeat: -1});
+        this.tween1 = gsap.fromTo(this.material.uniforms.UBlendStrength, 
+            {value: 10.0, delay: 0.0, paused: bool},
+            {value: 5.5, duration: 8.0, delay: 2.5, paused: bool, repeat: -1},
+            );
+        this.tween2 = gsap.fromTo(this.material.uniforms.uEndRipple, 
+            {value: 0.915, delay: 0.0, paused: bool},
+            {value: 0.0, duration: 8.0, delay: 3.0, paused: bool, repeat: -1, onComplete: () => { console.log('completed animation'); }},
+            );
     }
 
 
