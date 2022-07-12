@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
-import { gsap } from 'gsap';
+import { Elastic, gsap } from 'gsap';
 
 export default class Model
 {
@@ -16,12 +16,17 @@ export default class Model
         // this.axisHelper = new THREE.AxesHelper();
         // this.scene.add(this.axisHelper);
 
+        //cache
+        this.playInReverse = false;
+
+
         this.params = {};
         this.params.rotateX = 0.26;
         this.params.rotateY = 0.104;
         this.params.rotateZ = 1.6;
         this.params.scale = 0.7;
         this.params.height = -1;
+        this.params.metalness = 0.63;
 
         this.debugStuff();
 
@@ -38,6 +43,7 @@ export default class Model
 
         this.instance = this.resource.scene;
         this.instance.castShadow = true;
+        this.instance.receiveShadow = false;
         this.instance.scale.set(this.params.scale, this.params.scale, this.params.scale);
         this.instance.rotation.set(this.params.rotateX, this.params.rotateY, this.params.rotateZ);
         this.instance.position.z = this.params.height;
@@ -54,7 +60,7 @@ export default class Model
                 child.castShadow = true
                 child.material = new THREE.MeshPhysicalMaterial({
                     color: new THREE.Color('#EDEDED'),
-                    metalness: 0.75,
+                    metalness: this.params.metalness,
                     roughness: 0,
                     clearcoat: 1,
                     clearcoatRoughness: 0.4,
@@ -71,8 +77,28 @@ export default class Model
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.instance.position, {z: -0.15, duration: 8.0, paused: bool, delay: 0.25, repeat: -1});
+        this.tween1 = gsap.to(this.instance.position, 
+            {
+                z: -0.15, duration: 8.0, paused: bool, 
+                delay: 0.25, 
+                onComplete: this.reverse, 
+                onCompleteParams: [this], 
+                onReverseComplete: this.forwards, 
+                onReverseCompleteParams: [this],
+            });
     }
+
+    reverse(t)
+    {
+        t.tween1.reverse();
+    }
+
+    forwards(t)
+    {
+        t.tween1.play();
+    }
+
+
 
     debugStuff()
     {
@@ -144,6 +170,26 @@ export default class Model
                             this.instance.position.z = this.params.height;
                     });
                 }
+
+                if (this.debug.active) {
+                    this.debugFolder
+                        .add(this.params, "metalness")
+                        .name("metalness")
+                        .min(0)
+                        .max(2)
+                        .step(0.01)
+                        .onChange(() => {
+                            this.scene.traverse((child) =>
+                            {
+                                if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhysicalMaterial)
+                                {
+                                    console.log(child);
+                                    child.material.metalness = this.params.metalness;
+                                    child.material.needsUpdate = true;
+                                }
+                            })
+                        });
+                    }
     }
 
     update()

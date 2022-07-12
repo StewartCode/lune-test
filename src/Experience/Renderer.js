@@ -9,6 +9,7 @@ import  { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomP
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass';
+import { gsap } from 'gsap';
 
 export default class Renderer {
   constructor() {
@@ -25,12 +26,13 @@ export default class Renderer {
     this.setInstance();
 
     //cache
+    this.playInReverse = false;
     this.postProcessing = {};
     this.effectController = {
-        focus: 10.0,
+        focus: 74.0,
         // aperture: 0,
-        aperture: 0.22,
-        maxblur: 0.01,
+        aperture: 1.0,
+        maxblur: 0.008,
         // maxblur: 0
         bloom: 0.27,
         film: 0.14,
@@ -40,6 +42,8 @@ export default class Renderer {
 
     this.postProcessingSetup();
     this.matChanger();
+
+    this.animationSetup();
 
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder("renderer");
@@ -58,7 +62,7 @@ export default class Renderer {
     this.instance.outputEncoding = THREE.sRGBEncoding;
     this.instance.toneMapping = THREE.CineonToneMapping;
     this.instance.toneMappingExposure = 4.0;
-    this.instance.shadowMap.enabled = true;
+    this.instance.shadowMap.enabled = false;
     this.instance.shadowMap.type = THREE.PCFSoftShadowMap;
     // this.instance.setClearColor('#C9CBCC')
     // this.instance.setClearColor("black");
@@ -129,15 +133,15 @@ export default class Renderer {
 
     this.effectComposer.addPass(filmPass);
 
-    // this.effectComposer.addPass(bokehPass);
+    this.effectComposer.addPass(bokehPass);
 
     this.postProcessing.boken = bokehPass;
-    this.postProcessing.bloom = bloomPass;
+    // this.postProcessing.bloom = bloomPass;
     this.postProcessing.film = filmPass;
 
 
-    const sMAAPass = new SMAAPass();
-    this.effectComposer.addPass(sMAAPass);
+    // const sMAAPass = new SMAAPass();
+    // this.effectComposer.addPass(sMAAPass);
 
     // this.displacementPass = new ShaderPass(this.overlayMaterial)
     // this.displacementPass.material.uniforms.uTime.value = this.app.time.elapsed;
@@ -167,9 +171,9 @@ export default class Renderer {
         this.debugFolder = this.debug.ui.addFolder('effects');
         // this.debugFolder.close();
 
-        this.debugFolder.add(this.effectController, 'focus', 0, 1000.0, 1).onChange(this.matChanger());
+        this.debugFolder.add(this.effectController, 'focus', 0, 74.0, 0.1).onChange(this.matChanger());
         this.debugFolder.add(this.effectController, 'aperture', -1.0, 1.0, 0.001).onChange(this.matChanger());
-        this.debugFolder.add(this.effectController, 'maxblur', 0, 0.1, 0.001).onChange(this.matChanger());
+        this.debugFolder.add(this.effectController, 'maxblur', 0, 10, 0.01).onChange(this.matChanger());
 
         this.debugFolder.add(this.effectController, 'bloom', 0, 5.0, 0.01).onChange(this.matChanger());
         this.debugFolder.add(this.effectController, 'film', 0, 1.0, 0.01).onChange(this.matChanger());
@@ -180,22 +184,42 @@ export default class Renderer {
 
   matChanger()
   {
-      // console.log(this.postProcessing);
       if(this.postProcessing.boken.uniforms['focus'].value)
       {
 
           return () => {
-              // this.postProcessing.boken.uniforms['focus'].value = this.effectController.focus;
-              // this.postProcessing.boken.uniforms['aperture'].value = this.effectController.aperture * 0.0001;
-              // this.postProcessing.boken.uniforms['maxblur'].value = this.effectController.maxblur;
+              this.postProcessing.boken.uniforms['focus'].value = this.effectController.focus;
+              this.postProcessing.boken.uniforms['aperture'].value = this.effectController.aperture * 0.0001;
+              this.postProcessing.boken.uniforms['maxblur'].value = this.effectController.maxblur;
 
-              this.postProcessing.bloom.strength = this.effectController.bloom;
+              // this.postProcessing.bloom.strength = this.effectController.bloom;
               this.postProcessing.film.uniforms['nIntensity'].value = this.effectController.film;
               this.postProcessing.film.uniforms['sCount'].value = this.effectController.scanlines;
               this.postProcessing.film.uniforms['sIntensity'].value = this.effectController.scanlinesIntensity;
           }
       }
 
+  }
+
+
+  animationSetup()
+  {
+      this.tween1 = gsap.to(this.postProcessing.boken.uniforms['aperture'], {
+        value: 0, duration: 8.0, onComplete: this.reverse, onCompleteParams: [this],
+        onReverseComplete: this.forwards, onReverseCompleteParams: [this],
+        ease: "power4.out"
+       }
+    );
+  }
+
+  reverse(t)
+  {
+      t.tween1.reverse();
+  }
+
+  forwards(t)
+  {
+      t.tween1.play();
   }
 
 

@@ -21,12 +21,6 @@ export default class Milk
         this.params.speed = 0.0114;
         this.params.endRipple = 0.915;
 
-
-        //cache
-        this.objectOfTweens;
-
-
-
         this.start();
         this.debugStuff();
 
@@ -193,14 +187,35 @@ export default class Milk
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.fromTo(this.material.uniforms.UBlendStrength, 
-            {value: 10.0, delay: 0.0, paused: bool},
-            {value: 5.5, duration: 8.0, delay: 2.5, paused: bool, repeat: -1},
+        // this.tween1 = gsap.fromTo(this.material.uniforms.UBlendStrength, 
+        //     {value: 10.0, delay: 0.0, paused: bool},
+        //     {value: 5.5, duration: 8.0, delay: 2.5, paused: bool, repeat: -1},
+        //     );
+        // this.tween2 = gsap.fromTo(this.material.uniforms.uEndRipple, 
+        //     {value: 0.915, delay: 0.0, paused: bool},
+        //     {value: 0.0, duration: 8.0, delay: 3.0, paused: bool, repeat: -1, onComplete: () => { console.log('completed animation'); }},
+        //     );
+
+
+        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, 
+            {value: 5.5, duration: 8.0, delay: 0.0, paused: bool, onComplete: this.reverse, onCompleteParams: [this], onReverseComplete: this.forwards, onReverseCompleteParams: [this]},
             );
-        this.tween2 = gsap.fromTo(this.material.uniforms.uEndRipple, 
-            {value: 0.915, delay: 0.0, paused: bool},
-            {value: 0.0, duration: 8.0, delay: 3.0, paused: bool, repeat: -1, onComplete: () => { console.log('completed animation'); }},
+
+        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, 
+            {value: 0.0, duration: 8.0, delay: 0.0, paused: bool, onComplete: this.reverse, onCompleteParams: [this], onReverseComplete: this.forwards, onReverseCompleteParams: [this]},
             );
+    }
+
+    reverse(t)
+    {
+        t.tween1.reverse();
+        t.tween2.reverse();
+    }
+
+    forwards(t)
+    {
+        t.tween1.play();
+        t.tween2.play();
     }
 
 
