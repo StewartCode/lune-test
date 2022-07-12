@@ -195,8 +195,8 @@ export default class Milk
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 4.0, duration: 6.0, paused: bool});
-        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.0, duration: 6.0, delay: 0.5, paused: bool});
+        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 4.0, duration: 8.0, paused: bool, repeat: -1});
+        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.0, duration: 8.0, delay: 0.5, paused: bool, repeat: -1});
     }
 
 

@@ -71,7 +71,7 @@ export default class Model
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.instance.position, {z: -0.15, duration: 8.0, paused: bool, delay: 0.25});
+        this.tween1 = gsap.to(this.instance.position, {z: -0.15, duration: 8.0, paused: bool, delay: 0.25, repeat: -1});
     }
 
     debugStuff()
