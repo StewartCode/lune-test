@@ -15,8 +15,9 @@ export default class Milk
 
         this.params = {};
         this.params.blend = 0.85;
-        this.params.waveHeight = 0.25;
-        this.params.blendStrength = 5.0;
+        this.params.waveHeight = 0.02;
+        // this.params.blendStrength = 5.0;
+        this.params.blendStrength = 0.1;
         this.params.speed = 0.0214;
         this.params.endRipple = 1.0;
 
@@ -30,8 +31,10 @@ export default class Milk
         this.debugStuff();
 
         //paused
-        this.animationSetup(false);
+        // this.animationSetup(false);
         this.destroy();
+
+        console.log(this.instance);
     }
     start()
     {
@@ -55,7 +58,7 @@ export default class Milk
                 uWaveHeight: { value: this.params.waveHeight },
                 UBlendStrength: { value: this.params.blendStrength },
                 UBlend: { value: this.params.blend },
-                shininess: { value: 150.0 },
+                shininess: { value: 75.0 },
                 uTexture: { value:  texture},
                 uEndRipple: { value: this.params.endRipple }
             }
@@ -63,8 +66,8 @@ export default class Milk
 
         this.material = new THREE.ShaderMaterial({
             transparent: true,
-            fragmentShader,
-            vertexShader,
+            fragmentShader: customFragmentShader,
+            vertexShader: customVertexShader,
             uniforms: customUniform,
             lights: true,
             side: THREE.FrontSide,
@@ -154,9 +157,9 @@ export default class Milk
                     this.debugFolder
                     .add(this.params, "waveHeight")
                     .name("waveHeight")
-                    .min(0.1)
-                    .max(10.0)
-                    .step(0.1)
+                    .min(0.0)
+                    .max(5.0)
+                    .step(0.01)
                     .onChange(() => {
 
                         this.scene.traverse((child) =>
@@ -173,7 +176,7 @@ export default class Milk
                     this.debugFolder
                     .add(this.params, "endRipple")
                     .name("endRipple")
-                    .min(0.85)
+                    .min(0.0)
                     .max(1.0)
                     .step(0.0001)
                     .onChange(() => {
@@ -193,7 +196,7 @@ export default class Milk
     animationSetup(bool)
     {
         this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, {value: 0.4, duration: 1.0, paused: bool});
-        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.85, duration: 3.0, delay: 0.1, paused: bool});
+        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, {value: 0.0, duration: 3.0, delay: 0.1, paused: bool});
     }
 
 

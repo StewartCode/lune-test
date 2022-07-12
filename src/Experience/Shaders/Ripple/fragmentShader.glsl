@@ -52,7 +52,9 @@ void main()
 
     textureColor.rgb *= vElevation * 2.0 + 0.65;
 
-    textureColor.a = (distanceFlipped - UBlend) * muliplier;
+    // textureColor.a = (distanceFlipped - UBlend) * muliplier;
+    // textureColor.a = muliplier;
+    // textureColor.a = 1.0;
 
     gl_FragColor = textureColor;
 }

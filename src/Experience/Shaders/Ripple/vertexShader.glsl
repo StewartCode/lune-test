@@ -3,6 +3,7 @@ uniform float uTime;
 uniform float uSpeed;
 uniform float uWaveHeight;
 uniform float UBlendStrength;
+uniform float uEndRipple;
 
 varying vec2 vUv;
 varying float vElevation;
@@ -25,6 +26,17 @@ void main()
 
     distance *= UBlendStrength;
 
+
+    float muliplier = 1.0;
+
+    if (distanceFlipped > uEndRipple)
+    {
+        muliplier = 0.0;
+    }
+
+
+
+
     float elevation = (sin(angle) * uWaveHeight);
 
     modelPosition.z += elevation;
@@ -34,7 +46,7 @@ void main()
     gl_Position = projectedPosition;
 
     vUv = uv;
-    vElevation = -elevation;
+    vElevation = -elevation * muliplier;
 
 }
 
