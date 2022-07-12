@@ -79,7 +79,7 @@ export default class Model
     {
         this.tween1 = gsap.to(this.instance.position, 
             {
-                z: -0.15, duration: 8.0, paused: bool, 
+                z: 0.15, duration: 8.0, paused: bool, 
                 delay: 0.25, 
                 onComplete: this.reverse, 
                 onCompleteParams: [this], 
@@ -183,7 +183,6 @@ export default class Model
                             {
                                 if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhysicalMaterial)
                                 {
-                                    console.log(child);
                                     child.material.metalness = this.params.metalness;
                                     child.material.needsUpdate = true;
                                 }
