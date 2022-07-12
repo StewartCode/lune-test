@@ -9,6 +9,7 @@ import  { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomP
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass';
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
 import { gsap } from 'gsap';
 
 export default class Renderer {
@@ -129,11 +130,14 @@ export default class Renderer {
 
     const filmPass = new FilmPass(this.effectController.film,0,0,0);
     const bloomPass = new UnrealBloomPass(0.5, this.effectController.bloom, 0, 0);
+    const glitchPass = new GlitchPass();
     this.effectComposer.addPass(bloomPass);
 
     this.effectComposer.addPass(filmPass);
 
     this.effectComposer.addPass(bokehPass);
+
+    this.effectComposer.addPass(glitchPass);
 
     this.postProcessing.boken = bokehPass;
     // this.postProcessing.bloom = bloomPass;
