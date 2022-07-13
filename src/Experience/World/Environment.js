@@ -21,7 +21,7 @@ export default class Environment
 
         this.animationSetup(false);
 
-        // this.setEnvironmentMap()
+        this.setEnvironmentMap()
         
 
         //light from 1.558

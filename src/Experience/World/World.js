@@ -37,10 +37,10 @@ export default class World
             // }
             // Setup
             // this.floor = new Floor();
-            this.model = new Model(this.modelGroup);
-            // this.milkBase = new MilkBase();
-            this.milk = new Milk();
             this.environment = new Environment();
+            this.milk = new Milk(this.environment);
+            this.model = new Model(this.modelGroup, this.milk);
+            this.milkBase = new MilkBase();
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 
@@ -71,5 +71,9 @@ export default class World
         {
             this.milk.update()
         }   
+        if(this.milkBase)
+        {
+            this.milkBase.update()
+        }  
     }
 }

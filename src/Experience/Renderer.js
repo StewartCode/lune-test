@@ -22,7 +22,7 @@ export default class Renderer {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.color = "#000000";
+    this.params.color = "#EDEDED";
 
     this.setInstance();
 
@@ -137,7 +137,7 @@ export default class Renderer {
 
     this.effectComposer.addPass(bokehPass);
 
-    this.effectComposer.addPass(glitchPass);
+    // this.effectComposer.addPass(glitchPass);
 
     this.postProcessing.boken = bokehPass;
     // this.postProcessing.bloom = bloomPass;

@@ -4,9 +4,10 @@ import { Elastic, gsap } from 'gsap';
 
 export default class Model
 {
-    constructor(group)
+    constructor(group, milk)
     {
         this.group = group;
+        this.milk = milk;
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
@@ -26,7 +27,7 @@ export default class Model
         this.params.rotateZ = 1.6;
         this.params.scale = 0.7;
         this.params.height = -1;
-        this.params.metalness = 0.63;
+        this.params.metalness = 0.75;
 
         this.debugStuff();
 
@@ -64,9 +65,6 @@ export default class Model
                     roughness: 0,
                     clearcoat: 1,
                     clearcoatRoughness: 0.4,
-
-                    // shininess: 350,
-                    // specular: new THREE.Color('#EDEDED'),
                     emissive: new THREE.Color('black'),
                     normalMap: this.normal
                 });
@@ -77,26 +75,41 @@ export default class Model
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.to(this.instance.position, 
+        this.tween1 = gsap.fromTo(this.instance.position, 
             {
-                z: 0.15, duration: 8.0, paused: bool, 
-                delay: 0.25, 
-                onComplete: this.reverse, 
-                onCompleteParams: [this], 
-                onReverseComplete: this.forwards, 
-                onReverseCompleteParams: [this],
+                z: -1.0
+            },
+            {
+                z: 0.15, duration: 7.75, paused: bool, 
+                delay: 0.25,
+                // onComplete: this.reverse, 
+                // onCompleteParams: [this], 
+                // onReverseComplete: this.forwards, 
+                // onReverseCompleteParams: [this],
             });
+
+        this.milk.on('restart-animation', () => {
+            this.tween1.restart();
+            console.log('model hit forwards on event');
+        })
+
+        this.milk.on('reverse-animation', () => {
+            this.tween1.reverse();
+            console.log('model hit reverse on event');
+        })
     }
 
-    reverse(t)
-    {
-        t.tween1.reverse();
-    }
+    // reverse(t)
+    // {
+    //     t.tween1.reverse();
+    //     console.log('model hit reverse');
+    // }
 
-    forwards(t)
-    {
-        t.tween1.play();
-    }
+    // forwards(t)
+    // {
+    //     // t.tween1.play();
+    //     console.log('model hit forwards');
+    // }
 
 
 

@@ -1,26 +1,31 @@
 import * as THREE from 'three';
+import EventEmitter from '../Utils/EventEmitter';
 import Experience from '../Experience';
 import fragmentShader from '../../Experience/Shaders/Ripple/fragmentShader.glsl';
 import vertexShader from '../../Experience/Shaders/Ripple/vertexShader.glsl';
 import { gsap } from 'gsap';
 
-export default class Milk 
+export default class Milk extends EventEmitter
 {
-    constructor()
+    constructor(environment)
     {
+
+        super();
+
         this.experience = new Experience();
         this.scene = this.experience.scene;
         this.debug = this.experience.debug;
+        this.environment = environment;
 
 
         this.params = {};
-        this.params.blend = 0.0;
+        this.params.blend = 3.0;
         // this.params.waveHeight = 0.225;
         this.params.waveHeight = 1.5;
         this.params.frequency = 1.0;
         this.params.blendStrength = 10.0;
         this.params.speed = 0.0114;
-        this.params.endRipple = 0.915;
+        this.params.endRipple = 1.0;
 
         this.start();
         this.debugStuff();
@@ -29,12 +34,16 @@ export default class Milk
         this.animationSetup(false);
         this.destroy();
     }
+
     start()
     {
         this.geometry = new THREE.PlaneBufferGeometry(25, 25, 128, 128);
 
-        const customVertexShader = document.getElementById('customVertexShader').textContent;
-        const customFragmentShader = document.getElementById('customFragmentShader').textContent;
+        // const customVertexShader = document.getElementById('customVertexShaderPhong').textContent;
+        // const customFragmentShader = document.getElementById('customFragmentShaderPhong').textContent;
+
+        const customVertexShader = document.getElementById('customVertexShaderPhysical').textContent;
+        const customFragmentShader = document.getElementById('customFragmentShaderPhysical').textContent;
 
         this.texture = document.getElementById("texture1");
 
@@ -43,7 +52,8 @@ export default class Milk
 
 
         const customUniform = new THREE.UniformsUtils.merge([
-            THREE.ShaderLib.phong.uniforms,
+            // THREE.ShaderLib.phong.uniforms,
+            THREE.ShaderLib.physical.uniforms,
             {
                 uColor: { value: new THREE.Color('#EDEDED')},
                 uTime: { value: this.time },
@@ -59,20 +69,31 @@ export default class Milk
 
         this.material = new THREE.ShaderMaterial({
             transparent: true,
-            fragmentShader: customFragmentShader,
             vertexShader: customVertexShader,
+            fragmentShader: customFragmentShader,
             uniforms: customUniform,
             lights: true,
             side: THREE.FrontSide,
         });
 
-        // this.material2 = new THREE.MeshPhongMaterial({
-        //     transparent: true
-        // })
+        this.material2 = new THREE.MeshPhysicalMaterial({
+            transparent: true,
+            envMap: this.environment.environmentMap.texture,
+            envMapIntensity: 1.0,
+            color: new THREE.Color('#EDEDED'),
+            metalness: 0.63,
+            roughness: 0,
+            clearcoat: 1,
+            clearcoatRoughness: 0.4,
+            emissive: new THREE.Color('black'),
+            side: THREE.DoubleSide
+        })
 
         this.instance = new THREE.Mesh(this.geometry, this.material);
 
-        // this.instance.position.x = -100;
+        this.instance.material.uniforms.envMap.value = this.environment.environmentMap.texture;
+
+        console.log(this.instance);
 
         this.scene.add(this.instance);
     }
@@ -96,7 +117,7 @@ export default class Milk
                     .add(this.params, "blend")
                     .name("blend")
                     .min(0)
-                    .max(1)
+                    .max(3)
                     .step(0.05)
                     .onChange(() => {
 
@@ -198,12 +219,31 @@ export default class Milk
         //     );
 
 
-        this.tween1 = gsap.to(this.material.uniforms.UBlendStrength, 
-            {value: 5.5, duration: 8.0, delay: 0.0, paused: bool, onComplete: this.reverse, onCompleteParams: [this], onReverseComplete: this.forwards, onReverseCompleteParams: [this]},
+        this.tween1 = gsap.fromTo(this.material.uniforms.UBlend, 
+                {
+                    value: 3.0, 
+                },
+                {
+                    value: 0, 
+                    duration: 8.0, 
+                    delay: 0.0, paused: bool, 
+                    onComplete: this.reverse, 
+                    onCompleteParams: [this], 
+                    onReverseComplete: this.forwards, 
+                    onReverseCompleteParams: [this]
+                },
             );
 
-        this.tween2 = gsap.to(this.material.uniforms.uEndRipple, 
-            {value: 0.0, duration: 8.0, delay: 0.0, paused: bool, onComplete: this.reverse, onCompleteParams: [this], onReverseComplete: this.forwards, onReverseCompleteParams: [this]},
+        this.tween2 = gsap.fromTo(this.material.uniforms.uEndRipple, 
+                {
+                    value: 1.0
+                },
+                {
+                    value: 0.6804, 
+                    duration: 7.0, 
+                    delay: 1.0, 
+                    paused: bool
+                },
             );
     }
 
@@ -211,13 +251,30 @@ export default class Milk
     {
         t.tween1.reverse();
         t.tween2.reverse();
+        t.setTriggerEndOfForwards();
+
+        console.log('milk hit reverse');
     }
 
     forwards(t)
     {
-        t.tween1.play();
-        t.tween2.play();
+        t.tween1.restart();
+        t.tween2.restart();
+        t.setTriggerEndOfReverse();
+
+        console.log('milk hit forwards');
     }
+
+    setTriggerEndOfReverse()
+    {
+        this.trigger('restart-animation');
+    }
+
+    setTriggerEndOfForwards()
+    {
+        this.trigger('reverse-animation');
+    }
+
 
 
     update()

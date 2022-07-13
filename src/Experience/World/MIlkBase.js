@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import Experience from '../Experience';
 import { gsap } from 'gsap';
+import fragmentShader from '../Shaders/MilkBase/fragmentShader.glsl';
+import vertexShader from '../Shaders/MilkBase/vertexShader.glsl';
 
 export default class MilkBase 
 {
@@ -12,6 +14,12 @@ export default class MilkBase
 
 
         this.params = {};
+        // this.params.waveHeight = 0.225;
+        this.params.waveHeight = 0.1;
+        this.params.frequency = 1.0;
+        this.params.blendStrength = 10.0;
+        this.params.speed = 0.0114;
+        this.params.endRipple = 1.0;
 
 
         //cache
@@ -55,14 +63,22 @@ export default class MilkBase
         //     }
         // ])
 
-        // this.material = new THREE.ShaderMaterial({
-        //     transparent: true,
-        //     fragmentShader,
-        //     vertexShader,
-        //     uniforms: customUniform,
-        //     lights: true,
-        //     side: THREE.FrontSide,
-        // });
+        this.material = new THREE.ShaderMaterial({
+            transparent: true,
+            fragmentShader,
+            vertexShader,
+            side: THREE.FrontSide,
+            uniforms: {
+                uColor: { value: new THREE.Color('#EDEDED')},
+                uTime: { value: this.time },
+                uSpeed: { value: this.params.speed },
+                uWaveHeight: { value: this.params.waveHeight },
+                UBlendStrength: { value: this.params.blendStrength },
+                UBlend: { value: this.params.blend },
+                shininess: { value: 150.0 },
+                uEndRipple: { value: this.params.endRipple }
+            }
+        });
 
         this.material2 = new THREE.MeshPhysicalMaterial({
             color: new THREE.Color('#EDEDED'),
@@ -74,7 +90,11 @@ export default class MilkBase
             clearcoatRoughness: 0.4
         })
 
-        this.instance = new THREE.Mesh(this.geometry, this.material2);
+        this.material3 = new THREE.MeshBasicMaterial({
+            color: new THREE.Color('#EDEDED')
+        })
+
+        this.instance = new THREE.Mesh(this.geometry, this.material);
         this.instance.receiveShadow = false;
 
         this.instance.position.z = -0.001;
