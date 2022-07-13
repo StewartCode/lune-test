@@ -108,14 +108,16 @@ void main()
     // textureColor.a = (distanceFlipped - UBlend) * muliplier;
     // textureColor.a = muliplier;
     // textureColor.a = 1.0;
-    vec3 a = vec3(vUv, 0.0);
-    vec3 b = vec3(0.0, 0.0, 0.0);
-    float c = 0.0;
 
+    vec3 ro = vec3(0.0, 0.0, 20.0);
+    // vec3 rd = normalize(vec3(vUv.x, vUv.y, 1.0));
+    vec3 rd = normalize(vec3(0, 0, -20.0));
 
-    float x = signedDistanceToCircle(a,b,c);
+    float d = RayMarch(ro, rd);
 
-    gl_FragColor = vec4(uColor, x);
+    vec3 color = vec3(d,d,d);
+
+    gl_FragColor = vec4(color, 1.0);
 }
 
 
