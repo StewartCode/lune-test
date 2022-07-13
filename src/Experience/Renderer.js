@@ -22,7 +22,7 @@ export default class Renderer {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.color = "#EDEDED";
+    this.params.color = "#ffffff";
 
     this.setInstance();
 
@@ -228,9 +228,10 @@ export default class Renderer {
 
 
   update() {
-    // this.instance.render(this.scene, this.camera.instance);
+    
+    this.instance.render(this.scene, this.camera.instance);
 
-    this.effectComposer.render();
+    // this.effectComposer.render();
 
   }
 }

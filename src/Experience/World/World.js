@@ -5,7 +5,9 @@ import Environment from './Environment.js';
 import Floor from './Floor.js';
 import Milk from './Milk.js';
 import MilkBase from './MIlkBase.js';
+import MilkV2 from './MilkV2.js';
 import Model from './Model'
+import ModelV2 from './ModelV2.js';
 import Video from './Video.js';
 
 export default class World
@@ -38,9 +40,11 @@ export default class World
             // Setup
             // this.floor = new Floor();
             this.environment = new Environment();
-            this.milk = new Milk(this.environment);
-            this.model = new Model(this.modelGroup, this.milk);
-            this.milkBase = new MilkBase();
+            // this.milk = new Milk(this.environment);
+            // this.model = new Model(this.modelGroup, this.milk);
+            // this.milkBase = new MilkBase();
+            this.modelV2 = new ModelV2();
+            this.milkV2 = new MilkV2();
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 
