@@ -33,7 +33,7 @@ export default class Renderer {
         focus: 74.0,
         // aperture: 0,
         aperture: 1.0,
-        maxblur: 0.008,
+        maxblur: 0.002,
         // maxblur: 0
         bloom: 0.27,
         film: 0.14,
@@ -119,9 +119,9 @@ export default class Renderer {
     this.effectComposer.addPass(renderPass);
 
     const bokehPass = new BokehPass(this.scene, this.camera.instance, {
-        focus: 74.0,
-        aperture: 1,
-        maxblur: 0.008,
+        focus: this.params.focus,
+        aperture: this.params.aperture,
+        maxblur: this.params.maxblur,
 
         width: this.sizes.width,
         height: this.sizes.height
