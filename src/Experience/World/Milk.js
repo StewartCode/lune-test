@@ -78,8 +78,8 @@ export default class Milk extends EventEmitter
 
         this.material2 = new THREE.MeshPhysicalMaterial({
             transparent: true,
-            envMap: this.environment.environmentMap.texture,
-            envMapIntensity: 1.0,
+            // envMap: this.environment.environmentMap.texture,
+            // envMapIntensity: 1.0,
             color: new THREE.Color('#EDEDED'),
             metalness: 0.63,
             roughness: 0,
@@ -91,7 +91,7 @@ export default class Milk extends EventEmitter
 
         this.instance = new THREE.Mesh(this.geometry, this.material);
 
-        this.instance.material.uniforms.envMap.value = this.environment.environmentMap.texture;
+        // this.instance.material.uniforms.envMap.value = this.environment.environmentMap.texture;
 
         console.log(this.instance);
 

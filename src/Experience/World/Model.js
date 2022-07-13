@@ -27,7 +27,7 @@ export default class Model
         this.params.rotateZ = 1.6;
         this.params.scale = 0.7;
         this.params.height = -1;
-        this.params.metalness = 0.75;
+        this.params.metalness = 0.65;
 
         this.debugStuff();
 
