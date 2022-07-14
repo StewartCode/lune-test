@@ -75,6 +75,10 @@ export default class World
         {
             this.milk.update()
         }   
+        if(this.milkV2)
+        {
+            this.milkV2.update()
+        }  
         if(this.milkBase)
         {
             this.milkBase.update()
