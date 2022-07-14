@@ -8,7 +8,7 @@ import { Vector2, Vector3 } from 'three';
 
 export default class MilkV2 extends EventEmitter
 {
-    constructor(environment)
+    constructor(model)
     {
 
         super();
@@ -17,7 +17,7 @@ export default class MilkV2 extends EventEmitter
         this.sizes = this.experience.sizes;
         this.scene = this.experience.scene;
         this.debug = this.experience.debug;
-        this.environment = environment;
+        this.model = model;
 
 
         this.params = {};
@@ -31,9 +31,23 @@ export default class MilkV2 extends EventEmitter
         this.params.cameraPositionX = 0.0;
         this.params.cameraPositionY = 0.0;
         this.params.cameraPositionZ = 10.0;
+        this.params.sdfMod = 0.0;
 
         this.start();
         this.debugStuff();
+
+        console.log('model = ', this.model);
+
+        this.modelUv = this.model.geometry.attributes.uv;
+
+        // console.log(this.modelUv);
+        // this.randoms = new Float32Array(this.modelUv.array.length);
+
+        // for (let i = 0; i < this.modelUv.array.length; i++) {
+
+        //     // console.log(this.modelUv.array[i]);
+        //     this.randoms[i] = this.modelUv.array[i]
+        // }
 
         //paused
         // this.animationSetup(false);
@@ -42,7 +56,8 @@ export default class MilkV2 extends EventEmitter
 
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(5, 5, 1, 1);
+        this.geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
+        this.geometry.setAttribute('newUv', this.modelUv);
 
         this.material = new THREE.ShaderMaterial({
             transparent: true,
@@ -57,7 +72,8 @@ export default class MilkV2 extends EventEmitter
                 u_3d: { value: true },
                 u_2d: { value: false },
                 u_animatedDomains: { value: false },
-                u_cameraPosition: { value: new Vector3(this.params.cameraPositionX, this.params.cameraPositionY, this.params.cameraPositionZ) }
+                u_cameraPosition: { value: new Vector3(this.params.cameraPositionX, this.params.cameraPositionY, this.params.cameraPositionZ) },
+                USdfMod: { value: this.params.sdfMod },
                 // uSpeed: { value: this.params.speed },
                 // uWaveHeight: { value: this.params.waveHeight },
                 // UBlendStrength: { value: this.params.blendStrength },
@@ -71,7 +87,7 @@ export default class MilkV2 extends EventEmitter
 
         this.instance = new THREE.Mesh(this.geometry, this.material);
 
-        console.log(this.instance);
+        console.log('plane ', this.instance);
         this.scene.add(this.instance);
     }
 
@@ -250,6 +266,24 @@ export default class MilkV2 extends EventEmitter
                             if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
                             {
                                 child.material.uniforms.u_cameraPosition.value = new Vector3(this.params.cameraPositionX, this.params.cameraPositionY, this.params.cameraPositionZ);
+                                child.material.needsUpdate = true;
+                            }
+                        })
+                    });
+
+                    this.debugFolder
+                    .add(this.params, "sdfMod")
+                    .name("sdfMod")
+                    .min(-1.0)
+                    .max(1.0)
+                    .step(0.01)
+                    .onChange(() => {
+
+                        this.scene.traverse((child) =>
+                        {
+                            if(child instanceof THREE.Mesh && child.material instanceof THREE.ShaderMaterial)
+                            {
+                                child.material.uniforms.USdfMod.value = this.params.sdfMod;
                                 child.material.needsUpdate = true;
                             }
                         })

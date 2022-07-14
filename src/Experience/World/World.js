@@ -44,7 +44,7 @@ export default class World
             // this.model = new Model(this.modelGroup, this.milk);
             // this.milkBase = new MilkBase();
             this.modelV2 = new ModelV2();
-            this.milkV2 = new MilkV2();
+            this.milkV2 = new MilkV2(this.modelV2.instance.children[0].children[0]);
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 

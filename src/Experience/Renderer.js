@@ -22,7 +22,7 @@ export default class Renderer {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.color = "#ffffff";
+    this.params.color = "#111111";
 
     this.setInstance();
 
