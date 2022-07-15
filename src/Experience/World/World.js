@@ -44,7 +44,7 @@ export default class World
             this.milk = new Milk(this.environment);
             this.model = new Model(this.modelGroup, this.milk);
             this.milkBase = new MilkBase2(this.environment);
-            this.torusRipple = new TorusRipple();
+            this.torusRipple = new TorusRipple(this.milk);
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 

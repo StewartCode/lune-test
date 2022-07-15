@@ -4,21 +4,28 @@ import { gsap } from 'gsap';
 
 export default class TorusRipple
 {
-    constructor()
+    constructor(milk)
     {
         this.experience = new Experience();
+        this.milk = milk;
         this.scene = this.experience.scene;
         this.debug = this.experience.debug;
 
         this.params = {};
-        this.params.radius = 0.1;
-        this.params.tube = 0.1;
-        this.params.height = -1;
+        this.params.radius = 8.04;
+                // to         this.params.radius = 40;
+        this.params.tube = 14.43;
+        //from this.params.height = -1;
+        this.params.height = -0.804;
+        // to         this.params.height = -0.804;
 
 
         this.start();
 
         this.debugStuff();
+
+        this.animationSetup(false);
+
     }
 
     start()
@@ -31,7 +38,7 @@ export default class TorusRipple
 
     createTorus(r, t)
     {
-        this.geometry = new THREE.TorusBufferGeometry(r, t, 16, 100, Math.PI * 2);
+        this.geometry = new THREE.TorusBufferGeometry(r, t, 3, 100, Math.PI * 2);
 
         this.material = new THREE.MeshStandardMaterial({
             transparent: true,
@@ -62,6 +69,32 @@ export default class TorusRipple
 
         return this.instance;
 
+    }
+
+    animationSetup(bool)
+    {
+        this.tween1 = gsap.fromTo(this.instance.position, 
+            {
+                z: -1.0
+            },
+            {
+                z: 0.13, duration: 7.75, paused: bool, 
+                delay: 0.25,
+                // onComplete: this.reverse, 
+                // onCompleteParams: [this], 
+                // onReverseComplete: this.forwards, 
+                // onReverseCompleteParams: [this],
+            });
+
+        this.milk.on('restart-animation', () => {
+            this.tween1.restart();
+            console.log('model hit forwards on event');
+        })
+
+        this.milk.on('reverse-animation', () => {
+            this.tween1.reverse();
+            console.log('model hit reverse on event');
+        })
     }
 
     debugStuff()
