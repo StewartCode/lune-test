@@ -5,7 +5,9 @@ import Environment from './Environment.js';
 import Floor from './Floor.js';
 import Milk from './Milk.js';
 import MilkBase from './MIlkBase.js';
+import MilkBase2 from './MilkBase2.js';
 import Model from './Model'
+import TorusRipple from './TorusRipple.js';
 import Video from './Video.js';
 
 export default class World
@@ -40,7 +42,8 @@ export default class World
             this.environment = new Environment();
             this.milk = new Milk(this.environment);
             this.model = new Model(this.modelGroup, this.milk);
-            this.milkBase = new MilkBase();
+            this.milkBase = new MilkBase2(this.environment);
+            this.torusRipple = new TorusRipple();
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 

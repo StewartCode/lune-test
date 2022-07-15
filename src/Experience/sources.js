@@ -18,18 +18,5 @@ export default [
         name: 'standardNormal',
         type: 'texture',
         path: 'textures/standardNormalSML.png'
-    },
-    {
-        name: 'environmentMapTexture',
-        type: 'cubeTexture',
-        path:
-        [
-            'environmentMaps/px.png',
-            'environmentMaps/nx.png',
-            'environmentMaps/py.png',
-            'environmentMaps/ny.png',
-            'environmentMaps/pz.png',
-            'environmentMaps/nz.png'
-        ]
-    },
+    }
 ]

@@ -27,7 +27,8 @@ export default class Model
         this.params.rotateZ = 1.6;
         this.params.scale = 0.7;
         this.params.height = -1;
-        this.params.metalness = 0.75;
+        this.params.metalness = 0.0;
+        this.params.roughness = 0.35;
 
         this.debugStuff();
 
@@ -59,16 +60,14 @@ export default class Model
             if(child instanceof THREE.Mesh)
             {
                 child.castShadow = true
-                child.material = new THREE.MeshPhysicalMaterial({
+                child.material = new THREE.MeshStandardMaterial({
+                    transparent: true,
                     color: new THREE.Color('#EDEDED'),
-                    metalness: this.params.metalness,
+                    metalness: 0.63,
                     roughness: 0,
-                    clearcoat: 1,
-                    clearcoatRoughness: 0.4,
                     emissive: new THREE.Color('black'),
-                    normalMap: this.normal
+                    side: THREE.DoubleSide
                 });
-                child.material.side = THREE.DoubleSide;
             }
         })
     }
@@ -118,7 +117,7 @@ export default class Model
         // Debug
         if(this.debug.active)
         {
-            this.debugFolder = this.debug.ui.addFolder('model')
+            this.debugFolder = this.debug.ui.addFolder('model');
         }
 
         if (this.debug.active) {
@@ -197,6 +196,26 @@ export default class Model
                                 if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhysicalMaterial)
                                 {
                                     child.material.metalness = this.params.metalness;
+                                    child.material.needsUpdate = true;
+                                }
+                            })
+                        });
+                    }
+
+                
+                if (this.debug.active) {
+                    this.debugFolder
+                        .add(this.params, "roughness")
+                        .name("roughness")
+                        .min(0)
+                        .max(2)
+                        .step(0.01)
+                        .onChange(() => {
+                            this.scene.traverse((child) =>
+                            {
+                                if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhysicalMaterial)
+                                {
+                                    child.material.roughness = this.params.roughness;
                                     child.material.needsUpdate = true;
                                 }
                             })
