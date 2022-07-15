@@ -25,6 +25,7 @@ export default class World
         this.modelGroup.name = 'modelGroup';
         this.scene.add(this.modelGroup);
         this.modelGroup.rotation.x = Math.PI * 0.1;
+        // this.modelGroup.rotation.z = Math.PI * -0.01;
         this.milkArray = [];
         this.count = 5;
 

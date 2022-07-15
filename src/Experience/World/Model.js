@@ -23,7 +23,7 @@ export default class Model
 
         this.params = {};
         this.params.rotateX = 0.26;
-        this.params.rotateY = 0.104;
+        this.params.rotateY = -0.05;
         this.params.rotateZ = 1.6;
         this.params.scale = 0.7;
         this.params.height = -1;
@@ -79,7 +79,7 @@ export default class Model
                 z: -1.0
             },
             {
-                z: 0.15, duration: 7.75, paused: bool, 
+                z: 0.13, duration: 7.75, paused: bool, 
                 delay: 0.25,
                 // onComplete: this.reverse, 
                 // onCompleteParams: [this], 
