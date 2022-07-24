@@ -79,5 +79,9 @@ export default class World
         {
             this.milkBase.update()
         }  
+        if(this.torusRipple)
+        {
+            this.torusRipple.update()
+        }  
     }
 }

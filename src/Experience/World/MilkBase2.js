@@ -37,7 +37,7 @@ export default class MilkBase2
     }
     start()
     {
-        this.geometry = new THREE.PlaneBufferGeometry(8, 8, 64, 64);
+        this.geometry = new THREE.PlaneBufferGeometry(16, 16, 64, 64);
         this.normal = this.experience.resources.items.normal;
 
         // const customVertexShader = document.getElementById('customVertexShader').textContent;

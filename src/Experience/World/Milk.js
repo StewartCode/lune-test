@@ -223,7 +223,7 @@ export default class Milk extends EventEmitter
                 },
                 {
                     value: 0, 
-                    duration: 8.0, 
+                    duration: 12.0, 
                     delay: 0.0, paused: bool, 
                     onComplete: this.reverse, 
                     onCompleteParams: [this], 
@@ -238,7 +238,7 @@ export default class Milk extends EventEmitter
                 },
                 {
                     value: 0.6804, 
-                    duration: 7.0, 
+                    duration: 11.0, 
                     delay: 1.0, 
                     paused: bool
                 },

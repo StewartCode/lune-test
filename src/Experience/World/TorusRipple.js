@@ -73,29 +73,90 @@ export default class TorusRipple
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.fromTo(this.instance.position, 
+        this.timeline1 = gsap.timeline();
+        this.timeline2 = gsap.timeline();
+        this.tween1 = this.timeline1.fromTo(this.params, 
             {
-                z: -1.0
+                height: -2.0
             },
             {
-                z: 0.13, duration: 7.75, paused: bool, 
-                delay: 0.25,
-                // onComplete: this.reverse, 
-                // onCompleteParams: [this], 
-                // onReverseComplete: this.forwards, 
-                // onReverseCompleteParams: [this],
-            });
+                height: -2.0, duration: 1.0, paused: bool, 
+                delay: 1.0,
+            })
+            .to(this.params,
+            {
+                height: -2, duration: 2.5, paused: bool,  
+            })
+            .to(this.params,
+            {
+                height: 0.13, duration: 1.5, paused: bool, 
+            })
+            .to(this.params,
+            {
+                height: -2.0, duration: 1.0, paused: bool, 
+            })
+
+            .to(this.params,
+            {
+                height: -2.0, duration: 5.0, paused: bool, 
+            })
+
+
+        this.tween2 = this.timeline2.fromTo(this.params,
+            {
+                radius: 8.04
+            },
+            {
+                radius: 8.04, duration: 1.0, paused: bool, 
+                delay: 1.0,
+            })
+            .to(this.params,
+            {
+                radius: 8.04, duration: 3.0, paused: bool, 
+            })
+            .to(this.params,
+            {
+                radius: 8.04, duration: -0.5, paused: bool, 
+            })
+            .to(this.params,
+            {
+                radius: 40.0, duration: 2.5, paused: bool, 
+            })
+            .to(this.params,
+            {
+                radius: 8.04, duration: 4.0, paused: bool, 
+            })
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();
-            console.log('model hit forwards on event');
+            this.tween2.restart();
+            console.log('torus hit forwards on event');
         })
 
         this.milk.on('reverse-animation', () => {
-            this.tween1.reverse();
-            console.log('model hit reverse on event');
+            this.tween1.restart();
+            this.tween2.restart();
+            console.log('torus hit reverse on event');
         })
     }
+
+    // reverse(t)
+    // {
+    //     t.tween1.reverse();
+    //     t.tween2.reverse();
+    //     t.setTriggerEndOfForwards();
+
+    //     console.log('milk hit reverse');
+    // }
+
+    // forwards(t)
+    // {
+    //     t.tween1.restart();
+    //     t.tween2.restart();
+    //     t.setTriggerEndOfReverse();
+
+    //     console.log('milk hit forwards');
+    // }
 
     debugStuff()
     {
@@ -123,9 +184,7 @@ export default class TorusRipple
             .max(40)
             .step(0.01)
             .onChange(() => {
-                this.destroyTorus();
-                this.instance = this.createTorus(this.params.radius, this.params.tube);
-                this.scene.add(this.instance);
+                this.torusUpdateForAnimation();
             });
 
             this.debugFolder
@@ -140,10 +199,23 @@ export default class TorusRipple
         }
     }
 
+    torusUpdateForAnimation()
+    {
+        this.destroyTorus();
+        this.instance = this.createTorus(this.params.radius, this.params.tube);
+        this.instance.position.z = this.params.height;
+        this.scene.add(this.instance);
+    }
+
     destroyTorus()
     {
         this.scene.remove(this.instance);
         this.instance.material.dispose();
         this.instance.geometry.dispose();
+    }
+
+    update()
+    {
+        this.torusUpdateForAnimation();
     }
 }

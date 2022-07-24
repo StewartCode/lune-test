@@ -74,18 +74,35 @@ export default class Model
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.fromTo(this.instance.position, 
+        this.timeline1 = gsap.timeline();
+        this.tween1 = this.timeline1.fromTo(this.instance.position, 
             {
                 z: -1.0
             },
             {
-                z: 0.13, duration: 7.75, paused: bool, 
-                delay: 0.25,
-                // onComplete: this.reverse, 
-                // onCompleteParams: [this], 
-                // onReverseComplete: this.forwards, 
-                // onReverseCompleteParams: [this],
-            });
+                z: -1.0, duration: 0.0, paused: bool, 
+                delay: 5.0,
+            })
+            .to(this.instance.position, 
+            {
+                z: -1.0, duration: 1.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                z: 0.13, duration: 1.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                z: 0.13, duration: 2.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                z: -1.0, duration: 3.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                z: -1.0, duration: 3.0, paused: bool, 
+            })
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();
@@ -93,22 +110,12 @@ export default class Model
         })
 
         this.milk.on('reverse-animation', () => {
-            this.tween1.reverse();
+            this.tween1.restart();
             console.log('model hit reverse on event');
         })
+
+        console.log(this.timeline1);
     }
-
-    // reverse(t)
-    // {
-    //     t.tween1.reverse();
-    //     console.log('model hit reverse');
-    // }
-
-    // forwards(t)
-    // {
-    //     // t.tween1.play();
-    //     console.log('model hit forwards');
-    // }
 
 
 
