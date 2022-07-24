@@ -85,18 +85,7 @@ export default class Renderer {
 
     let RenderTargetClass = null
 
-    if(this.instance.getPixelRatio() === 1 && this.instance.capabilities.isWebGL2)
-    {
-        RenderTargetClass = THREE.WebGLMultisampleRenderTarget
-        // console.log('Using WebGLMultisampleRenderTarget')
-    }
-    else
-    {
-        RenderTargetClass = THREE.WebGLRenderTarget
-        // console.log('Using WebGLRenderTarget')
-    }
-
-
+    RenderTargetClass = THREE.WebGLRenderTarget;
 
     const renderTarget = new RenderTargetClass(
         this.sizes.width,

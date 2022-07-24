@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Experience from '../Experience';
 import { gsap } from 'gsap';
+import { animationSpeed, ease } from '../Utils/GlobalValues';
 
 export default class TorusRipple
 {
@@ -52,9 +53,6 @@ export default class TorusRipple
         this.material2 = new THREE.MeshMatcapMaterial({
             transparent: true,
             color: new THREE.Color('#EDEDED'),
-            // metalness: 0.63,
-            // roughness: 0,
-            // emissive: new THREE.Color('black'),
             side: THREE.DoubleSide
         })
 
@@ -77,55 +75,75 @@ export default class TorusRipple
         this.timeline2 = gsap.timeline();
         this.tween1 = this.timeline1.fromTo(this.params, 
             {
+                ease,
                 height: -2.0
             },
             {
                 height: -2.0, duration: 1.0, paused: bool, 
-                delay: 1.0,
+                delay: 0.5,
             })
             .to(this.params,
             {
+                ease,
                 height: -2, duration: 2.5, paused: bool,  
             })
             .to(this.params,
             {
-                height: 0.13, duration: 1.5, paused: bool, 
+                ease,
+                height: 0.1, duration: 2.5, paused: bool, 
             })
             .to(this.params,
             {
-                height: -2.0, duration: 1.0, paused: bool, 
+                ease,
+                height: -0.5, duration: 1.0, paused: bool, 
             })
 
             .to(this.params,
             {
-                height: -2.0, duration: 5.0, paused: bool, 
+                ease,
+                height: -1.0, duration: 1.0, paused: bool, 
+            })
+
+            .to(this.params,
+            {
+                ease,
+                height: -2.0, duration: 3.5, paused: bool, 
             })
 
 
         this.tween2 = this.timeline2.fromTo(this.params,
             {
+                ease,
                 radius: 8.04
             },
             {
+                ease,
                 radius: 8.04, duration: 1.0, paused: bool, 
                 delay: 1.0,
             })
             .to(this.params,
             {
+                ease,
                 radius: 8.04, duration: 3.0, paused: bool, 
             })
             .to(this.params,
             {
+                ease,
                 radius: 8.04, duration: -0.5, paused: bool, 
             })
             .to(this.params,
             {
-                radius: 40.0, duration: 2.5, paused: bool, 
+                ease,
+                radius: 30.0, duration: 5.5, paused: bool, 
             })
             .to(this.params,
             {
-                radius: 8.04, duration: 4.0, paused: bool, 
+                ease,
+                radius: 8.04, duration: 1.0, paused: bool, 
             })
+
+        this.tween1.timeScale(animationSpeed);
+        this.tween2.timeScale(animationSpeed);
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();

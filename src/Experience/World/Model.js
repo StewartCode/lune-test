@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { Elastic, gsap } from 'gsap';
+import { animationSpeed, ease } from '../Utils/GlobalValues.js';
 
 export default class Model
 {
@@ -77,32 +78,48 @@ export default class Model
         this.timeline1 = gsap.timeline();
         this.tween1 = this.timeline1.fromTo(this.instance.position, 
             {
+                ease,
                 z: -1.0
             },
             {
+                ease,
                 z: -1.0, duration: 0.0, paused: bool, 
                 delay: 5.0,
             })
             .to(this.instance.position, 
             {
+                ease,
                 z: -1.0, duration: 1.0, paused: bool, 
             })
             .to(this.instance.position, 
             {
+                ease,
+                z: -1.0, duration: 1.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                ease,
+                z: 0.13, duration: 3.0, paused: bool, 
+            })
+        .to(this.instance.position, 
+            {
+                ease,
                 z: 0.13, duration: 1.0, paused: bool, 
             })
             .to(this.instance.position, 
             {
-                z: 0.13, duration: 2.0, paused: bool, 
+                ease,
+                z: -1.0, duration: 2.0, paused: bool, 
             })
             .to(this.instance.position, 
             {
-                z: -1.0, duration: 3.0, paused: bool, 
+                ease,
+                z: -1.0, duration: 2.0, paused: bool, 
             })
-            .to(this.instance.position, 
-            {
-                z: -1.0, duration: 3.0, paused: bool, 
-            })
+
+
+        this.tween1.timeScale(animationSpeed);
+
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();
@@ -113,8 +130,6 @@ export default class Model
             this.tween1.restart();
             console.log('model hit reverse on event');
         })
-
-        console.log(this.timeline1);
     }
 
 
