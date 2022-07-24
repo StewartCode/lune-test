@@ -19,9 +19,19 @@ export default class Environment
 
         this.setSunLight()
 
-        this.animationSetup(false);
+        // this.animationSetup(false);
 
-        // this.setEnvironmentMap()
+        // this.setEnvironmentMap();
+
+        this.scene.traverse((child) =>
+        {
+            if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial)
+            {
+                child.material.envMapIntensity = 0.0;
+                child.material.needsUpdate = true
+            }
+        })
+
         
 
         //light from 1.558
@@ -33,44 +43,97 @@ export default class Environment
 
     setSunLight()
     {
-        this.sunLight = new THREE.DirectionalLight('#ffffff', 1.6)
-        // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4)
-        this.sunLight.castShadow = true
-        this.sunLight.shadow.camera.far = 15
-        this.sunLight.shadow.mapSize.set(1024, 1024)
-        this.sunLight.shadow.normalBias = 0.05
-        this.sunLight.position.set(0, 0, 1.5)
-        this.scene.add(this.sunLight)
+        // this.sunLight1 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        this.sunLight1 = new THREE.AmbientLight('#EDEDED', 3.24);
+
+        // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
+        this.sunLight1.castShadow = true;
+        // this.sunLight1.shadow.camera.far = 15;
+        // this.sunLight1.shadow.mapSize.set(1024, 1024);
+        // this.sunLight1.shadow.normalBias = 0.05;
+        this.sunLight1.position.set(5.0, 5.0, 5.0);
+        this.scene.add(this.sunLight1);
+
+
+        this.sunLight2 = new THREE.DirectionalLight('#EDEDED', 4.592);
+        // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
+        this.sunLight2.castShadow = true;
+        this.sunLight2.shadow.camera.far = 15;
+        this.sunLight2.shadow.mapSize.set(1024, 1024);
+        this.sunLight2.shadow.normalBias = 0.05;
+        this.sunLight2.position.set(5.0, -5.0, 5.0);
+        this.scene.add(this.sunLight2);
+
+
+        // this.sunLight3 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        // // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
+        // this.sunLight3.castShadow = true;
+        // this.sunLight3.shadow.camera.far = 15;
+        // this.sunLight3.shadow.mapSize.set(1024, 1024);
+        // this.sunLight3.shadow.normalBias = 0.05;
+        // this.sunLight3.position.set(-5.0, 5.0, 5.0);
+        // this.scene.add(this.sunLight3);
+
+
+        // this.sunLight4 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        // // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
+        // this.sunLight4.castShadow = true;
+        // this.sunLight4.shadow.camera.far = 15;
+        // this.sunLight4.shadow.mapSize.set(1024, 1024);
+        // this.sunLight4.shadow.normalBias = 0.05;
+        // this.sunLight4.position.set(-5.0, -5.0, 5.0);
+        // this.scene.add(this.sunLight4);
 
         // Debug
         if(this.debug.active)
         {
             this.debugFolder
-                .add(this.sunLight, 'intensity')
-                .name('sunLightIntensity')
+                .add(this.sunLight1, 'intensity')
+                .name('sunLightIntensity1')
                 .min(0)
                 .max(10)
                 .step(0.001)
+
+                this.debugFolder
+                .add(this.sunLight2, 'intensity')
+                .name('sunLightIntensity2')
+                .min(0)
+                .max(10)
+                .step(0.001)
+
+                // this.debugFolder
+                // .add(this.sunLight3, 'intensity')
+                // .name('sunLightIntensity3')
+                // .min(0)
+                // .max(10)
+                // .step(0.001)
+
+                // this.debugFolder
+                // .add(this.sunLight4, 'intensity')
+                // .name('sunLightIntensity4')
+                // .min(0)
+                // .max(10)
+                // .step(0.001)
             
             this.debugFolder
-                .add(this.sunLight.position, 'x')
+                .add(this.sunLight1.position, 'x')
                 .name('sunLightX')
-                .min(- 5)
-                .max(5)
+                .min(- 15)
+                .max(15)
                 .step(0.001)
             
             this.debugFolder
-                .add(this.sunLight.position, 'y')
+                .add(this.sunLight1.position, 'y')
                 .name('sunLightY')
-                .min(- 5)
-                .max(5)
+                .min(- 15)
+                .max(15)
                 .step(0.001)
             
             this.debugFolder
-                .add(this.sunLight.position, 'z')
+                .add(this.sunLight1.position, 'z')
                 .name('sunLightZ')
-                .min(- 5)
-                .max(5)
+                .min(- 15)
+                .max(15)
                 .step(0.001)
         }
 
@@ -81,12 +144,12 @@ export default class Environment
 
     setEnvironmentMap()
     {
-        this.environmentMap = {}
-        this.environmentMap.intensity = 1.027
-        this.environmentMap.texture = this.resources.items.environmentMapTexture
-        this.environmentMap.texture.encoding = THREE.sRGBEncoding
+        this.environmentMap = {};
+        this.environmentMap.intensity = 0.0;
+        this.environmentMap.texture = this.resources.items.environmentMapTexture;
+        this.environmentMap.texture.encoding = THREE.sRGBEncoding;
         
-        this.scene.environment = this.environmentMap.texture
+        this.scene.environment = this.environmentMap.texture;
 
         this.environmentMap.updateMaterials = () =>
         {
@@ -100,7 +163,6 @@ export default class Environment
                 }
             })
         }
-        this.environmentMap.updateMaterials()
 
         // Debug
         if(this.debug.active)

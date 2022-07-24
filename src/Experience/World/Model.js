@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { Elastic, gsap } from 'gsap';
+import { animationSpeed, ease } from '../Utils/GlobalValues.js';
 
 export default class Model
 {
@@ -8,14 +9,11 @@ export default class Model
     {
         this.group = group;
         this.milk = milk;
-        this.experience = new Experience()
-        this.scene = this.experience.scene
-        this.resources = this.experience.resources
-        this.time = this.experience.time
-        this.debug = this.experience.debug
-
-        // this.axisHelper = new THREE.AxesHelper();
-        // this.scene.add(this.axisHelper);
+        this.experience = new Experience();
+        this.scene = this.experience.scene;
+        this.resources = this.experience.resources;
+        this.time = this.experience.time;
+        this.debug = this.experience.debug;
 
         //cache
         this.playInReverse = false;
@@ -23,11 +21,12 @@ export default class Model
 
         this.params = {};
         this.params.rotateX = 0.26;
-        this.params.rotateY = 0.104;
+        this.params.rotateY = -0.05;
         this.params.rotateZ = 1.6;
         this.params.scale = 0.7;
         this.params.height = -1;
-        this.params.metalness = 0.65;
+        this.params.metalness = 0.0;
+        this.params.roughness = 0.35;
 
         this.debugStuff();
 
@@ -59,57 +58,74 @@ export default class Model
             if(child instanceof THREE.Mesh)
             {
                 child.castShadow = true
-                child.material = new THREE.MeshPhysicalMaterial({
+                child.material = new THREE.MeshStandardMaterial({
+                    transparent: true,
                     color: new THREE.Color('#EDEDED'),
-                    metalness: this.params.metalness,
+                    metalness: 0.63,
                     roughness: 0,
-                    clearcoat: 1,
-                    clearcoatRoughness: 0.4,
                     emissive: new THREE.Color('black'),
-                    normalMap: this.normal
+                    side: THREE.DoubleSide
                 });
-                child.material.side = THREE.DoubleSide;
             }
         })
     }
 
     animationSetup(bool)
     {
-        this.tween1 = gsap.fromTo(this.instance.position, 
+        this.timeline1 = gsap.timeline();
+        this.tween1 = this.timeline1.fromTo(this.instance.position, 
             {
+                ease,
                 z: -1.0
             },
             {
-                z: 0.15, duration: 7.75, paused: bool, 
-                delay: 0.25,
-                // onComplete: this.reverse, 
-                // onCompleteParams: [this], 
-                // onReverseComplete: this.forwards, 
-                // onReverseCompleteParams: [this],
-            });
+                ease,
+                z: -1.0, duration: 0.0, paused: bool, 
+                delay: 4.0,
+            })
+            .to(this.instance.position, 
+            {
+                ease,
+                z: -1.0, duration: 1.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                ease,
+                z: -1.0, duration: 1.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                ease,
+                z: 0.13, duration: 3.0, paused: bool, 
+            })
+        .to(this.instance.position, 
+            {
+                ease,
+                z: 0.13, duration: 2.5, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                ease,
+                z: -1.0, duration: 2.0, paused: bool, 
+            })
+            .to(this.instance.position, 
+            {
+                ease,
+                z: -1.0, duration: 1.0, paused: bool, 
+            })
+
+
+        this.tween1.timeScale(animationSpeed);
+
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();
-            console.log('model hit forwards on event');
         })
 
         this.milk.on('reverse-animation', () => {
-            this.tween1.reverse();
-            console.log('model hit reverse on event');
+            this.tween1.restart();
         })
     }
-
-    // reverse(t)
-    // {
-    //     t.tween1.reverse();
-    //     console.log('model hit reverse');
-    // }
-
-    // forwards(t)
-    // {
-    //     // t.tween1.play();
-    //     console.log('model hit forwards');
-    // }
 
 
 
@@ -118,7 +134,7 @@ export default class Model
         // Debug
         if(this.debug.active)
         {
-            this.debugFolder = this.debug.ui.addFolder('model')
+            this.debugFolder = this.debug.ui.addFolder('model');
         }
 
         if (this.debug.active) {
@@ -197,6 +213,26 @@ export default class Model
                                 if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhysicalMaterial)
                                 {
                                     child.material.metalness = this.params.metalness;
+                                    child.material.needsUpdate = true;
+                                }
+                            })
+                        });
+                    }
+
+                
+                if (this.debug.active) {
+                    this.debugFolder
+                        .add(this.params, "roughness")
+                        .name("roughness")
+                        .min(0)
+                        .max(2)
+                        .step(0.01)
+                        .onChange(() => {
+                            this.scene.traverse((child) =>
+                            {
+                                if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhysicalMaterial)
+                                {
+                                    child.material.roughness = this.params.roughness;
                                     child.material.needsUpdate = true;
                                 }
                             })

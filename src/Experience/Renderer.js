@@ -22,7 +22,8 @@ export default class Renderer {
     this.debug = this.experience.debug;
 
     this.params = {};
-    this.params.color = "#111111";
+    this.params.color = "#ededed";
+
 
     this.setInstance();
 
@@ -30,27 +31,28 @@ export default class Renderer {
     this.playInReverse = false;
     this.postProcessing = {};
     this.effectController = {
-        focus: 74.0,
+        focus: 0.0,
         // aperture: 0,
-        aperture: 1.0,
-        maxblur: 0.002,
+        aperture: 0.0,
+        maxblur: 0.000,
         // maxblur: 0
         bloom: 0.27,
-        film: 0.14,
+        film: 0.0,
         scanlines: 1024,
         scanlinesIntensity: 0.0
     }
 
     this.postProcessingSetup();
-    this.matChanger();
 
-    this.animationSetup();
+    // this.animationSetup();
 
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder("renderer");
     }
 
     this.debugStuff();
+
+    this.matChanger();
 
   }
 
@@ -84,18 +86,7 @@ export default class Renderer {
 
     let RenderTargetClass = null
 
-    if(this.instance.getPixelRatio() === 1 && this.instance.capabilities.isWebGL2)
-    {
-        RenderTargetClass = THREE.WebGLMultisampleRenderTarget
-        // console.log('Using WebGLMultisampleRenderTarget')
-    }
-    else
-    {
-        RenderTargetClass = THREE.WebGLRenderTarget
-        // console.log('Using WebGLRenderTarget')
-    }
-
-
+    RenderTargetClass = THREE.WebGLRenderTarget;
 
     const renderTarget = new RenderTargetClass(
         this.sizes.width,
@@ -106,8 +97,6 @@ export default class Renderer {
             format: THREE.RGBAFormat
         }
     )
-
-
 
 
     this.effectComposer = new EffectComposer(this.instance, renderTarget)
@@ -177,7 +166,7 @@ export default class Renderer {
 
         this.debugFolder.add(this.effectController, 'focus', 0, 74.0, 0.1).onChange(this.matChanger());
         this.debugFolder.add(this.effectController, 'aperture', -1.0, 1.0, 0.001).onChange(this.matChanger());
-        this.debugFolder.add(this.effectController, 'maxblur', 0, 10, 0.01).onChange(this.matChanger());
+        this.debugFolder.add(this.effectController, 'maxblur', 0, 1000, 0.01).onChange(this.matChanger());
 
         this.debugFolder.add(this.effectController, 'bloom', 0, 5.0, 0.01).onChange(this.matChanger());
         this.debugFolder.add(this.effectController, 'film', 0, 1.0, 0.01).onChange(this.matChanger());
@@ -188,7 +177,7 @@ export default class Renderer {
 
   matChanger()
   {
-      if(this.postProcessing.boken.uniforms['focus'].value)
+      if(true)
       {
 
           return () => {
@@ -228,10 +217,7 @@ export default class Renderer {
 
 
   update() {
-    
     this.instance.render(this.scene, this.camera.instance);
-
     // this.effectComposer.render();
-
   }
 }

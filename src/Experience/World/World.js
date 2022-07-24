@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import { Vector3 } from 'three';
 import Experience from '../Experience.js';
+import Dot from './Dot.js';
 import Environment from './Environment.js';
 import Floor from './Floor.js';
 import Milk from './Milk.js';
 import MilkBase from './MIlkBase.js';
-import MilkV2 from './MilkV2.js';
+import MilkBase2 from './MilkBase2.js';
 import Model from './Model'
-import ModelV2 from './ModelV2.js';
+import TorusRipple from './TorusRipple.js';
 import Video from './Video.js';
 
 export default class World
@@ -25,8 +26,12 @@ export default class World
         this.modelGroup.name = 'modelGroup';
         this.scene.add(this.modelGroup);
         this.modelGroup.rotation.x = Math.PI * 0.1;
+        // this.modelGroup.rotation.z = Math.PI * -0.01;
         this.milkArray = [];
         this.count = 5;
+
+        //cache
+        this.dotArray = [];
 
         this.runMouseDetect();
 
@@ -40,11 +45,52 @@ export default class World
             // Setup
             // this.floor = new Floor();
             this.environment = new Environment();
-            // this.milk = new Milk(this.environment);
-            // this.model = new Model(this.modelGroup, this.milk);
-            // this.milkBase = new MilkBase();
-            this.modelV2 = new ModelV2();
-            this.milkV2 = new MilkV2(this.modelV2.instance.children[0].children[0]);
+            this.milk = new Milk(this.environment);
+            this.model = new Model(this.modelGroup, this.milk);
+            this.milkBase = new MilkBase2(this.environment);
+            this.torusRipple = new TorusRipple(this.milk);
+
+            // this.dotMasterGroup = new THREE.Group();
+            // this.dotMasterGroup.name = 'dotMasterGroup';
+            // this.scene.add(this.dotMasterGroup);
+
+            this.rotateAmount = (Math.PI * 2) / 40;
+            let rotateTally = 0;
+
+            for (let i = 0; i < 40; i++) {
+                let group = new THREE.Group();
+                this.scene.add(group);
+                group.name = i;
+                this.dotArray[i] = new Dot(this.milk, group, 0);
+                this.dotArray[i].instance.position.x *= i;
+                group.rotation.z = rotateTally;
+                rotateTally += this.rotateAmount;
+            }
+
+            let rotateTally2 = 0;
+
+            for (let i = 0; i < 40; i++) {
+                let group = new THREE.Group();
+                this.scene.add(group);
+                group.name = i;
+                this.dotArray[i] = new Dot(this.milk, group, 1.0);
+                this.dotArray[i].instance.position.x *= i;
+                group.rotation.z = rotateTally2;
+                rotateTally2 += this.rotateAmount;
+            }
+
+            let rotateTally3 = 0;
+
+            for (let i = 0; i < 40; i++) {
+                let group = new THREE.Group();
+                this.scene.add(group);
+                group.name = i;
+                this.dotArray[i] = new Dot(this.milk, group, 2.0);
+                this.dotArray[i].instance.position.x *= i;
+                group.rotation.z = rotateTally3;
+                rotateTally3 += this.rotateAmount;
+            }
+            
             // this.videoBackground = new Video(false, 10, 10);
             // this.video = new Video(true);
 
@@ -82,6 +128,10 @@ export default class World
         if(this.milkBase)
         {
             this.milkBase.update()
+        }  
+        if(this.torusRipple)
+        {
+            this.torusRipple.update()
         }  
     }
 }
