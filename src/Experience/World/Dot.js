@@ -20,7 +20,6 @@ export default class Dot
     {
         this.instance = this.createSphere();
         this.group.add(this.instance);
-        // this.group.rotation.z = this.rotateAmount;
     }
 
     createSphere()
@@ -71,10 +70,7 @@ export default class Dot
                 z: -40.0
             })
 
-
             this.timeline1 = gsap.timeline();
-
-            console.log(this.instance);
 
             this.tween2 = this.timeline1.fromTo(this.instance.material, 
             {
@@ -110,13 +106,11 @@ export default class Dot
             this.milk.on('restart-animation', () => {
                 this.tween1.restart();
                 this.tween2.restart();
-                console.log('dot hit forwards on event');
             })
     
             this.milk.on('reverse-animation', () => {
                 this.tween1.restart();
                 this.tween2.restart();
-                console.log('dot hit reverse on event');
             })
     }
 }

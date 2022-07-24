@@ -9,14 +9,11 @@ export default class Model
     {
         this.group = group;
         this.milk = milk;
-        this.experience = new Experience()
-        this.scene = this.experience.scene
-        this.resources = this.experience.resources
-        this.time = this.experience.time
-        this.debug = this.experience.debug
-
-        // this.axisHelper = new THREE.AxesHelper();
-        // this.scene.add(this.axisHelper);
+        this.experience = new Experience();
+        this.scene = this.experience.scene;
+        this.resources = this.experience.resources;
+        this.time = this.experience.time;
+        this.debug = this.experience.debug;
 
         //cache
         this.playInReverse = false;
@@ -84,7 +81,7 @@ export default class Model
             {
                 ease,
                 z: -1.0, duration: 0.0, paused: bool, 
-                delay: 5.0,
+                delay: 4.0,
             })
             .to(this.instance.position, 
             {
@@ -104,7 +101,7 @@ export default class Model
         .to(this.instance.position, 
             {
                 ease,
-                z: 0.13, duration: 1.0, paused: bool, 
+                z: 0.13, duration: 2.5, paused: bool, 
             })
             .to(this.instance.position, 
             {
@@ -114,7 +111,7 @@ export default class Model
             .to(this.instance.position, 
             {
                 ease,
-                z: -1.0, duration: 2.0, paused: bool, 
+                z: -1.0, duration: 1.0, paused: bool, 
             })
 
 
@@ -123,12 +120,10 @@ export default class Model
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();
-            console.log('model hit forwards on event');
         })
 
         this.milk.on('reverse-animation', () => {
             this.tween1.restart();
-            console.log('model hit reverse on event');
         })
     }
 

@@ -73,6 +73,8 @@ export default class TorusRipple
     {
         this.timeline1 = gsap.timeline();
         this.timeline2 = gsap.timeline();
+        this.timeline3 = gsap.timeline();
+
         this.tween1 = this.timeline1.fromTo(this.params, 
             {
                 ease,
@@ -80,34 +82,41 @@ export default class TorusRipple
             },
             {
                 height: -2.0, duration: 1.0, paused: bool, 
-                delay: 0.5,
+                delay: 0,
             })
             .to(this.params,
             {
                 ease,
-                height: -2, duration: 2.5, paused: bool,  
+                height: -2, duration: 1.5, paused: bool,  
             })
             .to(this.params,
             {
                 ease,
-                height: 0.1, duration: 2.5, paused: bool, 
+                height: -0.7, duration: 3.0, paused: bool, 
             })
+            
             .to(this.params,
             {
                 ease,
-                height: -0.5, duration: 1.0, paused: bool, 
-            })
-
-            .to(this.params,
-            {
-                ease,
-                height: -1.0, duration: 1.0, paused: bool, 
+                height: -0.7, duration: 0.5, paused: bool, 
             })
 
             .to(this.params,
             {
                 ease,
-                height: -2.0, duration: 3.5, paused: bool, 
+                height: -0.7, duration: 1.0, paused: bool, 
+            })
+
+            .to(this.params,
+            {
+                ease,
+                height: -1, duration: 1.0, paused: bool, 
+            })
+
+            .to(this.params,
+            {
+                ease,
+                height: -1.25, duration: 2.5, paused: bool, 
             })
 
 
@@ -119,42 +128,80 @@ export default class TorusRipple
             {
                 ease,
                 radius: 8.04, duration: 1.0, paused: bool, 
-                delay: 1.0,
+                delay: 0,
             })
             .to(this.params,
             {
                 ease,
-                radius: 8.04, duration: 3.0, paused: bool, 
+                radius: 8.04, duration: 2.0, paused: bool, 
             })
             .to(this.params,
             {
                 ease,
-                radius: 8.04, duration: -0.5, paused: bool, 
+                radius: 8.04, duration: 0, paused: bool, 
             })
             .to(this.params,
             {
                 ease,
-                radius: 30.0, duration: 5.5, paused: bool, 
+                radius: 33, duration: 7.0, paused: bool, 
             })
-            .to(this.params,
+
+        
+        this.tween3 = this.timeline3.fromTo(this.instance.material,
             {
                 ease,
-                radius: 8.04, duration: 1.0, paused: bool, 
+                opacity: 0.0
+            },
+            {
+                ease,
+                opacity: 1.0,
+                duration: 1.0, 
+                paused: bool, 
+                delay: 0.5,
+            })
+            .to(this.instance.material,
+            {
+                ease,
+                opacity: 0.0,
+                duration: 3.0, 
+                paused: bool, 
+            })
+            .to(this.instance.material,
+            {
+                ease,
+                opacity: 0.0,
+                duration: -0.5, 
+                paused: bool, 
+            })
+            .to(this.instance.material,
+            {
+                ease,
+                opacity: 0.0,
+                duration: 5.5, 
+                paused: bool, 
+            })
+            .to(this.instance.material,
+            {
+                ease,
+                opacity: 0.0,
+                duration: 1.0, 
+                paused: bool, 
             })
 
         this.tween1.timeScale(animationSpeed);
         this.tween2.timeScale(animationSpeed);
+        this.tween3.timeScale(animationSpeed);
 
         this.milk.on('restart-animation', () => {
             this.tween1.restart();
             this.tween2.restart();
-            console.log('torus hit forwards on event');
+            this.tween3.restart();
         })
 
         this.milk.on('reverse-animation', () => {
             this.tween1.restart();
             this.tween2.restart();
-            console.log('torus hit reverse on event');
+            this.tween3.restart();
         })
     }
 

@@ -223,7 +223,7 @@ export default class Milk extends EventEmitter
                 },
                 {
                     value: 0, 
-                    duration: 12.0, 
+                    duration: 13.0, 
                     delay: 0.0, paused: bool, 
                     onComplete: this.reverse, 
                     onCompleteParams: [this], 
@@ -238,7 +238,7 @@ export default class Milk extends EventEmitter
                 },
                 {
                     value: 0.6804, 
-                    duration: 11.0, 
+                    duration: 12.0, 
                     delay: 1.0, 
                     paused: bool
                 },
@@ -250,8 +250,6 @@ export default class Milk extends EventEmitter
         t.tween1.reverse();
         t.tween2.reverse();
         t.setTriggerEndOfForwards();
-
-        console.log('milk hit reverse');
     }
 
     forwards(t)
@@ -259,8 +257,6 @@ export default class Milk extends EventEmitter
         t.tween1.restart();
         t.tween2.restart();
         t.setTriggerEndOfReverse();
-
-        console.log('milk hit forwards');
     }
 
     setTriggerEndOfReverse()
