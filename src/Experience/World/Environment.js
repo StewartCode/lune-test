@@ -42,17 +42,19 @@ export default class Environment
 
     setSunLight()
     {
-        this.sunLight1 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        // this.sunLight1 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        this.sunLight1 = new THREE.AmbientLight('#EDEDED', 0.5);
+
         // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
         this.sunLight1.castShadow = true;
-        this.sunLight1.shadow.camera.far = 15;
-        this.sunLight1.shadow.mapSize.set(1024, 1024);
-        this.sunLight1.shadow.normalBias = 0.05;
+        // this.sunLight1.shadow.camera.far = 15;
+        // this.sunLight1.shadow.mapSize.set(1024, 1024);
+        // this.sunLight1.shadow.normalBias = 0.05;
         this.sunLight1.position.set(5.0, 5.0, 5.0);
         this.scene.add(this.sunLight1);
 
 
-        this.sunLight2 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        this.sunLight2 = new THREE.DirectionalLight('#EDEDED', 0.1);
         // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
         this.sunLight2.castShadow = true;
         this.sunLight2.shadow.camera.far = 15;
@@ -62,24 +64,24 @@ export default class Environment
         this.scene.add(this.sunLight2);
 
 
-        this.sunLight3 = new THREE.DirectionalLight('#EDEDED', 0.5);
-        // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
-        this.sunLight3.castShadow = true;
-        this.sunLight3.shadow.camera.far = 15;
-        this.sunLight3.shadow.mapSize.set(1024, 1024);
-        this.sunLight3.shadow.normalBias = 0.05;
-        this.sunLight3.position.set(-5.0, 5.0, 5.0);
-        this.scene.add(this.sunLight3);
+        // this.sunLight3 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        // // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
+        // this.sunLight3.castShadow = true;
+        // this.sunLight3.shadow.camera.far = 15;
+        // this.sunLight3.shadow.mapSize.set(1024, 1024);
+        // this.sunLight3.shadow.normalBias = 0.05;
+        // this.sunLight3.position.set(-5.0, 5.0, 5.0);
+        // this.scene.add(this.sunLight3);
 
 
-        this.sunLight4 = new THREE.DirectionalLight('#EDEDED', 0.5);
-        // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
-        this.sunLight4.castShadow = true;
-        this.sunLight4.shadow.camera.far = 15;
-        this.sunLight4.shadow.mapSize.set(1024, 1024);
-        this.sunLight4.shadow.normalBias = 0.05;
-        this.sunLight4.position.set(-5.0, -5.0, 5.0);
-        this.scene.add(this.sunLight4);
+        // this.sunLight4 = new THREE.DirectionalLight('#EDEDED', 0.5);
+        // // this.sunLight = new THREE.DirectionalLight('#EDEDED', 4);
+        // this.sunLight4.castShadow = true;
+        // this.sunLight4.shadow.camera.far = 15;
+        // this.sunLight4.shadow.mapSize.set(1024, 1024);
+        // this.sunLight4.shadow.normalBias = 0.05;
+        // this.sunLight4.position.set(-5.0, -5.0, 5.0);
+        // this.scene.add(this.sunLight4);
 
         // Debug
         if(this.debug.active)
@@ -98,19 +100,19 @@ export default class Environment
                 .max(10)
                 .step(0.001)
 
-                this.debugFolder
-                .add(this.sunLight3, 'intensity')
-                .name('sunLightIntensity3')
-                .min(0)
-                .max(10)
-                .step(0.001)
+                // this.debugFolder
+                // .add(this.sunLight3, 'intensity')
+                // .name('sunLightIntensity3')
+                // .min(0)
+                // .max(10)
+                // .step(0.001)
 
-                this.debugFolder
-                .add(this.sunLight4, 'intensity')
-                .name('sunLightIntensity4')
-                .min(0)
-                .max(10)
-                .step(0.001)
+                // this.debugFolder
+                // .add(this.sunLight4, 'intensity')
+                // .name('sunLightIntensity4')
+                // .min(0)
+                // .max(10)
+                // .step(0.001)
             
             this.debugFolder
                 .add(this.sunLight1.position, 'x')
