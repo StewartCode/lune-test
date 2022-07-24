@@ -31,6 +31,7 @@ export default class Environment
                 child.material.needsUpdate = true
             }
         })
+
         
 
         //light from 1.558
